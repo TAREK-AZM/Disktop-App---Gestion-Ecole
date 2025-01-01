@@ -8,6 +8,5 @@ public interface CRUD <T,pk>{
     boolean update(T t);
     boolean delete(pk pk);
     Optional<T> findById(pk pk);
-    List<T> getdAll();
-    Optional<T> findByUserName(String username);
+    List<T> getAll();
 }
