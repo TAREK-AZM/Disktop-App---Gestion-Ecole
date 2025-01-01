@@ -9,7 +9,9 @@ public class DatabaseConnection {
     //private String url ="jdbc:postgresql://localhost:5432/edoc";
     private final String url = "jdbc:mysql://localhost:3306/edoc";
     private String username ="root";
+    //private String username ="postgres";
     private final String password = ""  ;
+    //private final String password = "pgufc"  ;
 
 
 
