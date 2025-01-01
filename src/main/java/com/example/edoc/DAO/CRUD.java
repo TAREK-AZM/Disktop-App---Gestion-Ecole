@@ -1,5 +1,7 @@
 package com.example.edoc.DAO;
 
+import com.example.edoc.Entities.Module;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,4 +11,8 @@ public interface CRUD <T,pk>{
     boolean delete(pk pk);
     Optional<T> findById(pk pk);
     List<T> getAll();
+<<<<<<< HEAD
+=======
+//    Optional<T> findByUserName(String username);
+>>>>>>> b6346c79cd496c761c3124907704e4492c2b1237
 }
