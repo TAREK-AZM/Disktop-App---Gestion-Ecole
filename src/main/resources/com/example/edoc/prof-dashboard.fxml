@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+            style="-fx-background-color: #f8f9fa;">
+    <!-- Left Sidebar -->
+    <left>
+        <VBox spacing="20" style="-fx-background-color: #ffffff;" prefWidth="250">
+            <padding>
+                <Insets top="20" left="20" bottom="20" right="20"/>
+            </padding>
+            <Label text="Professor Dashboard" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+            <Separator />
+            <VBox spacing="10">
+                <Button text="Home" style="-fx-background-color: transparent; -fx-text-fill: #20c997; -fx-font-size: 14px;" />
+                <Button text="Courses" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Attendance" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Gradebook" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Messages" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+            </VBox>
+            <Separator />
+            <VBox spacing="10">
+                <Label text="ACCOUNT" style="-fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Profile" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Logout" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <!-- Header -->
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <TextField promptText="Search..." style="-fx-pref-width: 300px;" />
+                <Label fx:id="userRoleLabel" text="Welcome, Professor" style="-fx-font-size: 14px; -fx-text-fill: #333;" />
+            </HBox>
+
+            <!-- Metrics Section -->
+            <HBox spacing="20" alignment="CENTER">
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Courses Taught" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="coursesTaughtLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Pending Grades" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="pendingGradesLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Total Students" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="totalStudentsLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+            </HBox>
+
+            <!-- Content Section -->
+            <HBox spacing="20" alignment="CENTER">
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Quick Actions" style="-fx-font-size: 20px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                    <Button text="Post Assignment" style="-fx-background-color: #20c997; -fx-text-fill: white; -fx-font-size: 14px;" />
+                    <Button text="Send Message" style="-fx-background-color: #20c997; -fx-text-fill: white; -fx-font-size: 14px;" />
+                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Notifications" style="-fx-font-size: 20px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                    <Label fx:id="notificationLabel" text="No new notifications" style="-fx-font-size: 14px; -fx-text-fill: #666;" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

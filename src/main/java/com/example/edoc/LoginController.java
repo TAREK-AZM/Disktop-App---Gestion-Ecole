@@ -67,15 +67,46 @@ public class LoginController {
     }
 
     private void navigateToProfDashboard() {
-        System.out.println("Navigating to Prof Dashboard...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/prof-dashboard.fxml"));
+            Parent dashboardRoot = loader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(dashboardRoot));
+            stage.setTitle("Admin Dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void navigateToSecretaireDashboard() {
-        System.out.println("Navigating to Secretaire Dashboard...");
+
+        try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/secretaire-dashboard.fxml"));
+        Parent dashboardRoot = loader.load();
+
+        // Get the current stage
+        Stage stage = (Stage) emailField.getScene().getWindow();
+        stage.setScene(new Scene(dashboardRoot));
+        stage.setTitle("Admin Dashboard");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
     private void navigateToAdminDashboard() {
-        System.out.println("navigating to admin dashboard...");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/admin-dashboard.fxml"));
+            Parent dashboardRoot = loader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(dashboardRoot));
+            stage.setTitle("Admin Dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
