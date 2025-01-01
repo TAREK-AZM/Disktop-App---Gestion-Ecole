@@ -16,3 +16,4 @@ public interface CRUD <T,pk> {
 
     List<T> getAll();
 }
+
