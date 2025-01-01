@@ -13,11 +13,34 @@ import java.util.Optional;
 public class UtilisateurDAO implements CRUD<Utilisateur , Integer>{
     private  PreparedStatement preparedStatement;
     private Connection connection = DatabaseConnection.getInstance().getConnection() ;
+
+    public Utilisateur login(String username, String password) {
+        String requete = "select *from utilisateurs where username = ? and password = ?";
+        try {
+            preparedStatement = connection.prepareStatement(requete);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                Utilisateur utilisateur = new Utilisateur();
+                utilisateur.setId(resultSet.getInt("id"));
+                utilisateur.setUsername(resultSet.getString("username"));
+                utilisateur.setPassword(resultSet.getString("password"));
+                utilisateur.setRole(resultSet.getString("role"));
+                return utilisateur;
+            }
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public boolean create(Utilisateur utilisateur) {
         String requete = "insert into utilisateurs values(?, ?, ?, ?)" ;
         try {
-            preparedStatement = connection.prepareStatement(requete);
             preparedStatement = connection.prepareStatement(requete);
             preparedStatement.setInt(1, utilisateur.getId());
             preparedStatement.setString(2, utilisateur.getUsername());

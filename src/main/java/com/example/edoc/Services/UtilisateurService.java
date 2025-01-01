@@ -24,4 +24,7 @@ public class UtilisateurService {
     public boolean addSecretaire(Utilisateur utilisateur) {
         return utilisateurDAO.create(utilisateur);
     }
+    public Utilisateur login(String username , String password) {
+        return utilisateurDAO.login(username, password);
+    }
 }
