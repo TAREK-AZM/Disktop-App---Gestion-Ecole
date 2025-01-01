@@ -30,7 +30,7 @@ public class DatabaseConnection {
         }
         return instance ;
     }
-    public Connection getCoonection(){
+    public Connection getConnection(){
         return connection ;
     }
 }
