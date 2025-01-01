@@ -1,5 +1,10 @@
 package com.example.edoc;
 
+import com.example.edoc.DAO.ProfesseurDAO;
+import com.example.edoc.DAO.UtilisateurDAO;
+import com.example.edoc.Entities.Professeur;
+import com.example.edoc.Entities.Utilisateur;
+import com.example.edoc.Services.ProfesseurService;
 import com.example.edoc.Utils.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +24,7 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        DatabaseConnection databaseConnection = DatabaseConnection.getInstance();
+       
         //launch();
     }
 }

@@ -12,4 +12,5 @@ public class Professeur {
     private String nom;
     private String prenom;
     private String specialite;
+
 }
