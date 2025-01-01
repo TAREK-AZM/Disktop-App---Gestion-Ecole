@@ -1,4 +1,4 @@
-package com.example.edoc.entities;
+package com.example.edoc.Entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Utilisateur {
+public class Professeur {
     private int id;
-    private String username;
-    private String password;
-    private String role;
+    private String nom;
+    private String prenom;
+    private String specialite;
 }

@@ -1,6 +1,6 @@
 package com.example.edoc;
 
-import com.example.edoc.connection.DatabaseConnection;
+import com.example.edoc.Utils.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
