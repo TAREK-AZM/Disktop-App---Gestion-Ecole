@@ -42,7 +42,7 @@ public class DashboardController {
 
     @FXML
     public void showDashboard() {
-        loadView("DashboardHome.fxml");
+        loadView("admin-dashboard.fxml");
     }
 
     @FXML

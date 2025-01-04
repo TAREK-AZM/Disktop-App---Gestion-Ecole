@@ -4,9 +4,7 @@ import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Services.EtudiantService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class ManageStudentController {
@@ -31,6 +29,8 @@ public class ManageStudentController {
 
     @FXML
     private Label successMessage;
+    @FXML
+    private Button cancelButton;
 
     private Etudiant student;
 
@@ -80,7 +80,7 @@ public class ManageStudentController {
 
         // Create a new student object
         Etudiant newStudent = new Etudiant();
-        newStudent.setId(45);
+        newStudent.setId(65);
         newStudent.setMatricule(matriculeField.getText());
         newStudent.setNom(nomField.getText());
         newStudent.setPrenom(prenomField.getText());
@@ -123,6 +123,8 @@ public class ManageStudentController {
 
     @FXML
     private void handleCancel() {
-
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
+
 }
