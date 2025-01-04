@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.StudentsController">
+    <Label text="Students" style="-fx-font-size: 18px;"/>
+
+    <TableView fx:id="studentsTable" prefWidth="800">
+        <columns>
+            <TableColumn text="ID" fx:id="idColumn" prefWidth="50"/>
+            <TableColumn text="Matricule" fx:id="matriculeColumn" prefWidth="100"/>
+            <TableColumn text="Nom" fx:id="nomColumn" prefWidth="150"/>
+            <TableColumn text="Prenom" fx:id="prenomColumn" prefWidth="150"/>
+            <TableColumn text="Email" fx:id="emailColumn" prefWidth="200"/>
+            <TableColumn text="Promo" fx:id="promoColumn" prefWidth="100"/>
+            <TableColumn text="Date Naissance" fx:id="dateNaissanceColumn" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="addButton" text="Add New Student" onAction="#handleAdd" />
+        <Button fx:id="updateButton" text="Update" disable="true" onAction="#handleUpdate"/>
+        <Button fx:id="deleteButton" text="Delete" disable="true" onAction="#handleDelete"/>
+        <Button fx:id="cancelButton" text="Cancel" disable="true" onAction="#handleCancel"/>
+    </HBox>
+    <!-- Placeholder for dynamic content -->
+    <StackPane fx:id="dynamicContent" prefHeight="300" prefWidth="800"/>
+</VBox>

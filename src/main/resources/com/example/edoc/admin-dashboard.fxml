@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+            fx:controller="com.example.edoc.Controllers.DashboardController"
+            style="-fx-background-color: #f8f9fa;">
+    <!-- Left Sidebar -->
+    <left>
+        <VBox spacing="20" style="-fx-background-color: #ffffff;" prefWidth="250">
+            <padding>
+                <Insets top="20" left="20" bottom="20" right="20"/>
+            </padding>
+            <Label text="School Management" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+            <Separator />
+            <VBox spacing="10">
+                <Button text="Dashboard" fx:id="dashboardBtn" onAction="#showDashboard"
+                        style="-fx-background-color: transparent; -fx-text-fill: #20c997; -fx-font-size: 14px;" />
+                <Button text="Students" fx:id="studentsBtn" onAction="#showStudents"
+                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Professors" fx:id="professorsBtn" onAction="#showProfessors"
+                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Modules" fx:id="modulesBtn" onAction="#showModules"
+                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Enrollments" fx:id="enrollmentsBtn" onAction="#showEnrollments"
+                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+            </VBox>
+            <Separator />
+            <VBox spacing="10">
+                <Label text="ACCOUNT PAGES" style="-fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Profile" fx:id="profileBtn" onAction="#showProfile"
+                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+                <Button text="Sign Out" fx:id="signOutBtn" onAction="#handleSignOut"
+                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <!-- Metrics Section -->
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <HBox spacing="20" alignment="CENTER">
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Total Students" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="totalStudentsLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Total Professors" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="totalProfessorsLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Total Modules" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="totalModulesLabel" text="0" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+                <VBox alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 10;">
+                    <Label text="Most Followed Module" style="-fx-font-size: 18px; -fx-text-fill: #333;" />
+                    <Label fx:id="mostFollowedModuleLabel" text="N/A" style="-fx-font-size: 24px; -fx-text-fill: #333; -fx-font-weight: bold;" />
+                </VBox>
+            </HBox>
+
+            <!-- Dynamic Content Area -->
+            <StackPane fx:id="contentArea" style="-fx-background-color: #ecf0f1;">
+                <!-- Dynamic content will be loaded here -->
+            </StackPane>
+        </VBox>
+    </center>
+
+</BorderPane>
