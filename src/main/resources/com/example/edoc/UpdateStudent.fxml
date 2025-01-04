@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.ManageStudentController"
+      style="-fx-padding: 20;"
+      prefWidth="400">
+    <Label text="Update Student" style="-fx-font-size: 18px;"/>
+    <TextField fx:id="matriculeField" promptText="Matricule"/>
+    <TextField fx:id="nomField" promptText="Nom"/>
+    <TextField fx:id="prenomField" promptText="Prenom"/>
+    <TextField fx:id="emailField" promptText="Email"/>
+    <TextField fx:id="promoField" promptText="Promo"/>
+    <DatePicker fx:id="dateNaissancePicker" promptText="Date Naissance"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Save" onAction="#handleUpdateSave"
+                style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 100;"/>
+    </HBox>
+
+    <!-- Success message -->
+    <Label fx:id="successMessage" text="Update successful!"
+           style="-fx-text-fill: #28a745; -fx-font-size: 14px; -fx-font-weight: bold;"
+           visible="false" alignment="CENTER"/>
+</VBox>

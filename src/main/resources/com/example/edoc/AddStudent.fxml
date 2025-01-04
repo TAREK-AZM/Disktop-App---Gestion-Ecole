@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.ManageStudentController"
+      style="-fx-padding: 20; -fx-background-color: #f8f9fa;"
+      prefWidth="400">
+    <Label text="Add New Student" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <TextField fx:id="matriculeField" promptText="Matricule"/>
+    <TextField fx:id="nomField" promptText="Nom"/>
+    <TextField fx:id="prenomField" promptText="Prenom"/>
+    <TextField fx:id="emailField" promptText="Email"/>
+    <TextField fx:id="promoField" promptText="Promo"/>
+    <DatePicker fx:id="dateNaissancePicker" promptText="Date Naissance"/>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Save" onAction="#handleAddSave" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <Button text="Cancel" onAction="#handleCancel" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+</VBox>
