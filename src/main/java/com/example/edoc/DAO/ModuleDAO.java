@@ -14,13 +14,13 @@ public class ModuleDAO implements CRUD<Module, Integer> {
 
     @Override
     public boolean create(Module module) {
-        String req = "INSERT INTO modules (id, nom_Module, code_Module, professeur_Id) VALUES (?, ?, ?, ?)";
+        String req = "INSERT INTO modules ( nom_Module, code_Module, professeur_Id) VALUES ( ?, ?, ?)";
         try {
             PreparedStatement ps = myConnection.prepareStatement(req);
-            ps.setInt(1, module.getId());             // Parameter 1: id
-            ps.setString(2, module.getNomModule());   // Parameter 2: nomModule
-            ps.setString(3, module.getCodeModule());  // Parameter 3: codeModule
-            ps.setInt(4, module.getProfesseurId());   // Parameter 4: professeurId
+//            ps.setInt(1, module.getId());             // Parameter 1: id
+            ps.setString(1, module.getNomModule());   // Parameter 2: nomModule
+            ps.setString(2, module.getCodeModule());  // Parameter 3: codeModule
+            ps.setInt(3, module.getProfesseurId());   // Parameter 4: professeurId
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {

@@ -4,31 +4,18 @@
 <?import javafx.geometry.*?>
 
 <VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.edoc.Controllers.ManageStudentController"
+      fx:controller="com.example.edoc.Controllers.module.ManageModuleController"
       style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #ffffff, #e3f2fd); -fx-border-color: #90caf9; -fx-border-radius: 15; -fx-background-radius: 15;"
-      alignment="CENTER"
-      prefWidth="400"
->
-    <!-- Title Section -->
-    <Label text="Add New Student" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-
-    <!-- Input Fields Section -->
+      alignment="CENTER" prefWidth="400">
+    <Label text="Add New Module" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;" />
     <VBox spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #bbdefb;">
-        <TextField fx:id="matriculeField" promptText="Matricule"
+        <TextField fx:id="nomModuleField" promptText="Module Name"
                    style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-        <TextField fx:id="nomField" promptText="Nom"
+        <TextField fx:id="codeModuleField" promptText="Module Code"
                    style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-        <TextField fx:id="prenomField" promptText="Prenom"
-                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-        <TextField fx:id="emailField" promptText="Email"
-                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-        <TextField fx:id="promoField" promptText="Promo"
-                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
-        <DatePicker fx:id="dateNaissancePicker" promptText="Date Naissance"
-                    style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+        <ComboBox fx:id="professeurComboBox" promptText="Select Professor"
+                  style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
     </VBox>
-
-    <!-- Action Buttons Section -->
     <HBox spacing="20" alignment="CENTER" style="-fx-padding: 10;">
         <Button text="Save" onAction="#handleAddSave"
                 style="-fx-background-color: linear-gradient(to right, #66bb6a, #43a047); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />

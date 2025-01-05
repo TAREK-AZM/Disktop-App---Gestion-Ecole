@@ -1,4 +1,4 @@
-package com.example.edoc.Controllers;
+package com.example.edoc.Controllers.etudiant;
 
 import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Services.EtudiantService;
@@ -103,18 +103,6 @@ public class StudentsController {
         studentsTable.setItems(allStudents);
     }
 
-//    private void setupSearchFilter() {
-//        if (searchNomField != null) {
-//            searchNomField.textProperty().addListener((observable, oldValue, newValue) -> filterStudents());
-//        }
-//        if (searchMatriculeField != null) {
-//            searchMatriculeField.textProperty().addListener((observable, oldValue, newValue) -> filterStudents());
-//        }
-//        if (searchPromoField != null) {
-//            searchPromoField.textProperty().addListener((observable, oldValue, newValue) -> filterStudents());
-//        }
-//    }
-
     private void filterStudents() {
         String searchNom = searchNomField != null ? searchNomField.getText().toLowerCase().trim() : "";
         String searchMatricule = searchMatriculeField != null ? searchMatriculeField.getText().toLowerCase().trim() : "";
@@ -133,7 +121,7 @@ public class StudentsController {
     @FXML
     private void handleAdd() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/AddStudent.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/AddStudent.fxml"));
             Parent addView = loader.load();
 
             Stage stage = new Stage(StageStyle.UNDECORATED);
@@ -148,54 +136,58 @@ public class StudentsController {
         }
     }
 
-
     @FXML
     private void handleUpdate() {
+    Etudiant selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
+    if (selectedStudent != null) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/UpdateStudent.fxml"));
+            Parent updateView = loader.load();
+
+            ManageStudentController controller = loader.getController();
+            controller.setStudent(selectedStudent); // Pass the selected student
+
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.setTitle("Add New Student");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(updateView));
+            stage.showAndWait();
+
+
+            loadStudents(); // Refresh the table after update
+        } catch (IOException e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+    } else {
+        System.out.println("No student selected for update!");
+    }
+}
+
+    @FXML
+    private void handleDeleteConfirmation() {
         Etudiant selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
         if (selectedStudent != null) {
             try {
-                // Load the UpdateStudent.fxml
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/UpdateStudent.fxml"));
-                Parent updateView = loader.load();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/ConfirmDelete.fxml"));
+                Parent confirmView = loader.load();
 
-                // Set up the fields manually within the current StudentsController
-                TextField matriculeField = (TextField) updateView.lookup("#matriculeField");
-                TextField nomField = (TextField) updateView.lookup("#nomField");
-                TextField prenomField = (TextField) updateView.lookup("#prenomField");
-                TextField emailField = (TextField) updateView.lookup("#emailField");
-                TextField promoField = (TextField) updateView.lookup("#promoField");
-                DatePicker dateNaissancePicker = (DatePicker) updateView.lookup("#dateNaissancePicker");
+                ConfirmDeletionController controller = loader.getController();
+                controller.setStudent(selectedStudent); // Pass the selected student
 
-                // Pre-fill the fields with the selected student's data
-                matriculeField.setText(selectedStudent.getMatricule());
-                nomField.setText(selectedStudent.getNom());
-                prenomField.setText(selectedStudent.getPrenom());
-                emailField.setText(selectedStudent.getEmail());
-                promoField.setText(selectedStudent.getPromo());
-                dateNaissancePicker.setValue(selectedStudent.getDateNaissance().toLocalDate());
-
-                // Create a new Stage for the pop-up
-                Stage stage = new Stage();
-                stage.setTitle("Update Student");
+                Stage stage = new Stage(StageStyle.UNDECORATED);
+                stage.setTitle("Add New Student");
                 stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(updateView));
+                stage.setScene(new Scene(confirmView));
                 stage.showAndWait();
 
-                // Update the student object and refresh the table after the pop-up is closed
-                selectedStudent.setMatricule(matriculeField.getText());
-                selectedStudent.setNom(nomField.getText());
-                selectedStudent.setPrenom(prenomField.getText());
-                selectedStudent.setEmail(emailField.getText());
-                selectedStudent.setPromo(promoField.getText());
-                selectedStudent.setDateNaissance(java.sql.Date.valueOf(dateNaissancePicker.getValue()));
 
-                // Save the changes to the database
-                etudiantService.update(selectedStudent);
-                loadStudents(); // Refresh the table after update
-
+                loadStudents(); // Refresh the table after deletion
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.out.println("No student selected for deletion!");
         }
     }
 
@@ -208,6 +200,7 @@ public class StudentsController {
             confirmationAlert.setHeaderText("Are you sure?");
             confirmationAlert.setContentText("Delete: " + selectedStudent.getNom() + " " + selectedStudent.getPrenom());
 
+
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response.getText().equals("OK")) {
                     etudiantService.delete(selectedStudent.getId());
@@ -219,13 +212,14 @@ public class StudentsController {
 
     @FXML
     private void handleCancel() {
-        dynamicContent.getChildren().clear();
+//        dynamicContent.getChildren().clear();
         studentsTable.getSelectionModel().clearSelection();
         addButton.setDisable(false);
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         cancelButton.setDisable(true);
     }
+
     @FXML
     private void handleSearch() {
         filterStudents();
