@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.etudiant.ManageEtudiantModulesController"
+      style="-fx-padding: 20; -fx-background-color: linear-gradient(to bottom, #ffffff, #f0f8ff); -fx-border-color: #90caf9; -fx-border-radius: 15; -fx-background-radius: 15;"
+      alignment="CENTER">
+    <!-- Title Section -->
+    <Label text="Manage Modules for Student" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" alignment="CENTER" />
+
+    <!-- Dropdown Section -->
+    <GridPane hgap="15" vgap="15" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" />
+            <ColumnConstraints halignment="LEFT" />
+        </columnConstraints>
+        <Label text="Select Student:" style="-fx-font-weight: bold;" />
+        <ComboBox fx:id="studentDropdown" prefWidth="300" />
+
+        <Label text="Select Module:" style="-fx-font-weight: bold;" GridPane.rowIndex="1" />
+        <ComboBox fx:id="moduleDropdown" prefWidth="300" GridPane.rowIndex="1" />
+    </GridPane>
+
+    <!-- Action Buttons Section -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="addModuleButton" text="Assign Module" onAction="#handleAssignModule"
+                style="-fx-background-color: linear-gradient(to right, #66bb6a, #43a047); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;" />
+        <Button fx:id="closeButton" text="Close" onAction="#handleClose"
+                style="-fx-background-color: linear-gradient(to right, #bdbdbd, #9e9e9e); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;" />
+    </HBox>
+</VBox>

@@ -1,7 +1,11 @@
 package com.example.edoc.Controllers.etudiant;
 
+import com.example.edoc.Controllers.professeur.ManageProfesseurModulesController;
 import com.example.edoc.Entities.Etudiant;
+import com.example.edoc.Entities.Inscription;
+import com.example.edoc.Entities.Module;
 import com.example.edoc.Services.EtudiantService;
+import com.example.edoc.Services.ModuleService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class StudentsController {
@@ -57,6 +62,9 @@ public class StudentsController {
     private Button cancelButton;
 
     @FXML
+    private Button moduleButton;
+
+    @FXML
     private TextField searchNomField;
 
     @FXML
@@ -71,7 +79,12 @@ public class StudentsController {
     @FXML
     private StackPane dynamicContent;
 
+    @FXML
+    private TableView<Module> modulesTable;
+
     private final EtudiantService etudiantService = new EtudiantService();
+    private final ModuleService moduleService = new ModuleService();
+
 
     private ObservableList<Etudiant> allStudents = FXCollections.observableArrayList();
 
@@ -93,6 +106,7 @@ public class StudentsController {
             addButton.setDisable(rowSelected);
             updateButton.setDisable(!rowSelected);
             deleteButton.setDisable(!rowSelected);
+            moduleButton.setDisable(!rowSelected);
             cancelButton.setDisable(false); // Always enable cancel
         });
     }
@@ -218,11 +232,53 @@ public class StudentsController {
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         cancelButton.setDisable(true);
+        moduleButton.setDisable(true);
     }
 
     @FXML
     private void handleSearch() {
         filterStudents();
+    }
+
+    private void loadModules() {
+        // Charger les modules disponibles depuis la base de données ou une autre source
+        List<Module> modules = moduleService.GetAllModules(); // Exemple d'appel de service
+        modulesTable.getItems().setAll(modules);
+    }
+
+    @FXML
+    private void handleAssignModule() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/affect-etudiant.fxml"));
+        Parent manageModuleView = loader.load();
+
+        Stage stage = new Stage(StageStyle.UNDECORATED);
+        stage.setTitle("Manage Modules for Professor");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(manageModuleView));
+        stage.showAndWait();
+        Module selectedModule = modulesTable.getSelectionModel().getSelectedItem();
+        if (selectedModule != null) {
+            int idModule = selectedModule.getId();
+            // Assigner le module à l'étudiant
+            boolean success  ;
+            Inscription inscription=   new Inscription(1 , 2 , idModule , LocalDate.now()) ;  // Exemple de service
+
+            if (inscription != null) {
+                showAlert("Succès", "Le module a été assigné avec succès.", Alert.AlertType.INFORMATION);
+            } else {
+                showAlert("Erreur", "Une erreur s'est produite lors de l'assignation.", Alert.AlertType.ERROR);
+            }
+        } else {
+            showAlert("Aucune sélection", "Veuillez sélectionner un module.", Alert.AlertType.WARNING);
+        }
+    }
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }
