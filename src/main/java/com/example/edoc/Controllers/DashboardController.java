@@ -52,7 +52,7 @@ public class DashboardController {
 
     @FXML
     public void showProfessors() {
-        loadView("Professors.fxml");
+        loadView("professeur/Professeurs.fxml");
     }
 
     @FXML
