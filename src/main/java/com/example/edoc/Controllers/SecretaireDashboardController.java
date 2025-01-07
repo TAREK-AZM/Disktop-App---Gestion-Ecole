@@ -1,9 +1,11 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.DAO.EtudiantDAO;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.ModuleService;
 import com.example.edoc.Services.ProfesseurService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,8 +21,11 @@ import lombok.NoArgsConstructor;
 import java.io.IOException;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class DashboardController {
+public class SecretaireDashboardController {
+    @FXML
+    private Button signOutBtn ;
     @FXML
     private Label usernameLabel;
 
@@ -50,13 +55,24 @@ public class DashboardController {
     @FXML
     private Label mostFollowedModuleLabel;
 
-    @FXML
-    private Button signOutBtn ;
+    private void loadStatistics() {
+        // Fetch and display the total number of students
+        EtudiantService studentService = new EtudiantService();
+        ProfesseurService professorService = new ProfesseurService();
+        ModuleService moduleService = new ModuleService();
+        int totalStudents = studentService.getAll().size();
+        totalStudentsLabel.setText(String.valueOf(totalStudents));
 
-    private EtudiantService studentService = new EtudiantService();
-    private ProfesseurService professorService = new ProfesseurService();
-    private ModuleService moduleService = new ModuleService();
+        // Fetch and display the total number of professors
+        int totalProfessors = professorService.getAllProfesseur().size();
+        totalProfessorsLabel.setText(String.valueOf(totalProfessors));
 
+        // Fetch and display the total number of modules
+        int totalModules = moduleService.GetAllModules().size();
+        totalModulesLabel.setText(String.valueOf(totalModules));
+
+
+    }
 
     @FXML
     public void initialize() {
@@ -74,59 +90,24 @@ public class DashboardController {
             roleLabel.setText(utilisateur.getRole());
         }
     }
-
-    private void loadStatistics() {
-        // Fetch and display the total number of students
-        int totalStudents = studentService.getAll().size();
-        totalStudentsLabel.setText(String.valueOf(totalStudents));
-
-        // Fetch and display the total number of professors
-        int totalProfessors = professorService.getAllProfesseur().size();
-        totalProfessorsLabel.setText(String.valueOf(totalProfessors));
-
-        // Fetch and display the total number of modules
-        int totalModules = moduleService.GetAllModules().size();
-        totalModulesLabel.setText(String.valueOf(totalModules));
-
-
-    }
-
-    @FXML
-    public void showDashboard() {
-        loadView("admin-dashboard.fxml");
-    }
-
     @FXML
     public void showStudents() {
         loadView("etudiant/Students.fxml");
     }
-    @FXML
-    public void showStudentsforProfessores() {
-        loadView("etudiant/StudentsforProfessores.fxml");
-    }
-    @FXML
-    public  void showModulesforProfessors(){
-        loadView("etudiant/ModulesforProfessors.fxml");
-    }
 
-    @FXML
-    public void showProfessors() {
-        loadView("professeur/Professeurs.fxml");
-    }
 
-    @FXML
-    public void showModules() {
-        loadView("module/Modules.fxml");
-    }
+//    @FXML
+//    public void showDashboard(ActionEvent actionEvent) {
+//        loadView("admin-dashboard.fxml");
+//    }
 
-    @FXML
-    public void showEnrollments() {
-        loadView("Enrollments.fxml");
-    }
-
-    @FXML
-    public void showProfile() {
-        loadView("Profile.fxml");
+    private void loadView(String fxmlFile) {
+        try {
+            Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -152,13 +133,4 @@ public class DashboardController {
         }
     }
 
-
-    private void loadView(String fxmlFile) {
-        try {
-            Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
-            contentArea.getChildren().setAll(view);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
