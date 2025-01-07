@@ -1,8 +1,6 @@
 package com.example.edoc.Controllers.etudiant;
 
-import com.example.edoc.Controllers.professeur.ManageProfesseurModulesController;
 import com.example.edoc.Entities.Etudiant;
-import com.example.edoc.Entities.Inscription;
 import com.example.edoc.Entities.Module;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.InscriptionService;
@@ -22,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -87,16 +84,17 @@ public class StudentsController {
     private StackPane dynamicContent;
 
     @FXML
-    private TableView<Module> modulesTable;
+    private ComboBox<String> moduleComboBox;
 
     private final EtudiantService etudiantService = new EtudiantService();
     private final ModuleService moduleService = new ModuleService();
-
+    private final InscriptionService inscriptionService = new InscriptionService();
 
     private ObservableList<Etudiant> allStudents = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // Initialize table columns
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         matriculeColumn.setCellValueFactory(new PropertyValueFactory<>("matricule"));
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -105,8 +103,12 @@ public class StudentsController {
         promoColumn.setCellValueFactory(new PropertyValueFactory<>("promo"));
         dateNaissanceColumn.setCellValueFactory(new PropertyValueFactory<>("dateNaissance"));
 
+        // Load modules into the ComboBox
+        loadModules1();
+
+        // Load all students initially
         loadStudents();
-//        setupSearchFilter();
+
         // Add listener to enable/disable buttons based on selection
         studentsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             boolean rowSelected = newSelection != null;
@@ -116,6 +118,14 @@ public class StudentsController {
             moduleButton.setDisable(!rowSelected);
             showButton.setDisable(!rowSelected);
             cancelButton.setDisable(false); // Always enable cancel
+        });
+
+        // Add listener to the ComboBox to fetch students by module
+        moduleComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Fetch students enrolled in the selected module
+                fetchStudentsByModule(newSelection);
+            }
         });
     }
 
@@ -160,31 +170,29 @@ public class StudentsController {
 
     @FXML
     private void handleUpdate() {
-    Etudiant selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
-    if (selectedStudent != null) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/UpdateStudent.fxml"));
-            Parent updateView = loader.load();
+        Etudiant selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
+        if (selectedStudent != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/UpdateStudent.fxml"));
+                Parent updateView = loader.load();
 
-            ManageStudentController controller = loader.getController();
-            controller.setStudent(selectedStudent); // Pass the selected student
+                ManageStudentController controller = loader.getController();
+                controller.setStudent(selectedStudent); // Pass the selected student
 
-            Stage stage = new Stage(StageStyle.UNDECORATED);
-            stage.setTitle("Add New Student");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(updateView));
-            stage.showAndWait();
+                Stage stage = new Stage(StageStyle.UNDECORATED);
+                stage.setTitle("Update Student");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(updateView));
+                stage.showAndWait();
 
-
-            loadStudents(); // Refresh the table after update
-        } catch (IOException e) {
-            System.out.println(e);
-            e.printStackTrace();
+                loadStudents(); // Refresh the table after update
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No student selected for update!");
         }
-    } else {
-        System.out.println("No student selected for update!");
     }
-}
 
     @FXML
     private void handleDeleteConfirmation() {
@@ -198,11 +206,10 @@ public class StudentsController {
                 controller.setStudent(selectedStudent); // Pass the selected student
 
                 Stage stage = new Stage(StageStyle.UNDECORATED);
-                stage.setTitle("Add New Student");
+                stage.setTitle("Confirm Deletion");
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.setScene(new Scene(confirmView));
                 stage.showAndWait();
-
 
                 loadStudents(); // Refresh the table after deletion
             } catch (IOException e) {
@@ -222,9 +229,8 @@ public class StudentsController {
             confirmationAlert.setHeaderText("Are you sure?");
             confirmationAlert.setContentText("Delete: " + selectedStudent.getNom() + " " + selectedStudent.getPrenom());
 
-
             confirmationAlert.showAndWait().ifPresent(response -> {
-                if (response.getText().equals("OK")) {
+                if (response == ButtonType.OK) {
                     etudiantService.delete(selectedStudent.getId());
                     loadStudents();
                 }
@@ -234,7 +240,6 @@ public class StudentsController {
 
     @FXML
     private void handleCancel() {
-//        dynamicContent.getChildren().clear();
         studentsTable.getSelectionModel().clearSelection();
         addButton.setDisable(false);
         updateButton.setDisable(true);
@@ -249,15 +254,44 @@ public class StudentsController {
         filterStudents();
     }
 
-    private void loadModules() {
-        // Charger les modules disponibles depuis la base de données ou une autre source
-        List<Module> modules = moduleService.GetAllModules(); // Exemple d'appel de service
-        modulesTable.getItems().setAll(modules);
+    private void loadModules1() {
+        // Fetch all modules from the service
+        List<Module> modules = moduleService.GetAllModules();
+
+        // Create a list to store module names
+        List<String> moduleNames = new ArrayList<>();
+
+        // Extract module names using a loop
+        for (Module module : modules) {
+            moduleNames.add(module.getNomModule());
+        }
+
+        // Convert the list to an ObservableList
+        ObservableList<String> observableModuleNames = FXCollections.observableArrayList(moduleNames);
+
+        // Set the items in the ComboBox
+        moduleComboBox.setItems(observableModuleNames);
+    }
+
+    private void fetchStudentsByModule(String moduleName) {
+        // Fetch the module ID by name
+        int moduleId = moduleService.findByName(moduleName);
+        if (moduleId !=0) {
+            Optional<Module> module = moduleService.GetModuleById(moduleId);
+
+            // Fetch students enrolled in the module using InscriptionService
+            List<Etudiant> students = inscriptionService.getEtudiantsByModule(module.get());
+
+            // Update the TableView with the fetched students
+            ObservableList<Etudiant> studentList = FXCollections.observableArrayList(students);
+            studentsTable.setItems(studentList);
+        } else {
+            System.out.println("Module not found: " + moduleName);
+        }
     }
 
     @FXML
     private void handleAssignModule() throws IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/affect-etudiant.fxml"));
         Parent manageModuleView = loader.load();
 
@@ -266,15 +300,8 @@ public class StudentsController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(manageModuleView));
         stage.showAndWait();
+    }
 
-    }
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
     @FXML
     public void showModules(ActionEvent actionEvent) throws IOException {
         // Get the selected student
@@ -285,15 +312,13 @@ public class StudentsController {
         }
 
         // Get the module IDs for the selected student
-        InscriptionService inscriptionService = new InscriptionService();
-        ModuleService moduleService = new ModuleService();
         List<Integer> listIds = inscriptionService.getAllModulesIds(selectedStudent.getId());
 
         // Retrieve the module names
         List<String> moduleNames = new ArrayList<>();
         for (Integer idModule : listIds) {
             Optional<Module> module = moduleService.GetModuleById(idModule);
-            if (module != null) {
+            if (module.isPresent()) {
                 moduleNames.add(module.get().getNomModule());
             }
         }

@@ -1,5 +1,7 @@
 package com.example.edoc.Services;
 
+import com.example.edoc.DAO.InscriptionDAO;
+import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Inscription;
 import com.example.edoc.Entities.Module;
 import com.example.edoc.Entities.Professeur;
@@ -21,6 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 public class InscriptionService {
     private PreparedStatement preparedStatement ;
+    private final InscriptionDAO inscriptionDAO = new InscriptionDAO();
     private Connection connection = DatabaseConnection.getInstance().getConnection() ;
 
     public boolean create(Inscription inscription) {
@@ -56,4 +59,10 @@ public class InscriptionService {
 
         return moduleIds;
     }
+
+    public List<Etudiant> getEtudiantsByModule(Module module){
+        return this.inscriptionDAO.getEtudiantsByModule(module);
+    }
+
+
 }

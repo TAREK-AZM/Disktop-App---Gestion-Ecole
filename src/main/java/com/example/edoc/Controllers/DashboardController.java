@@ -1,14 +1,36 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.Entities.Utilisateur;
+import com.example.edoc.Services.EtudiantService;
+import com.example.edoc.Services.ModuleService;
+import com.example.edoc.Services.ProfesseurService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 
+@Data
+@NoArgsConstructor
 public class DashboardController {
+    @FXML
+    private Label usernameLabel;
+
+    @FXML
+    private Label prenomLabel;
+
+    @FXML
+    private Label emailLabel;
+
+    @FXML
+    private Label roleLabel;
+
+    private Utilisateur utilisateur;
 
     @FXML
     private StackPane contentArea;
@@ -25,19 +47,43 @@ public class DashboardController {
     @FXML
     private Label mostFollowedModuleLabel;
 
+
+    private EtudiantService studentService = new EtudiantService();
+    private ProfesseurService professorService = new ProfesseurService();
+    private ModuleService moduleService = new ModuleService();
+
+
     @FXML
     public void initialize() {
-        // Initialize metrics (replace these with actual data retrieval logic)
-        loadMetrics();
+        loadStatistics();
+    }
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+        updateUI();
     }
 
-    private void loadMetrics() {
-        // Example: Fetch metrics from a service or database
-        // Replace with actual service calls
-        totalStudentsLabel.setText("120"); // Example value
-        totalProfessorsLabel.setText("15"); // Example value
-        totalModulesLabel.setText("8"); // Example value
-        mostFollowedModuleLabel.setText("Mathematics"); // Example value
+    private void updateUI() {
+        // Update the UI with the utilisateur data
+        if (utilisateur != null) {
+            usernameLabel.setText(utilisateur.getUsername());
+            roleLabel.setText(utilisateur.getRole());
+        }
+    }
+
+    private void loadStatistics() {
+        // Fetch and display the total number of students
+        int totalStudents = studentService.getAll().size();
+        totalStudentsLabel.setText(String.valueOf(totalStudents));
+
+        // Fetch and display the total number of professors
+        int totalProfessors = professorService.getAllProfesseur().size();
+        totalProfessorsLabel.setText(String.valueOf(totalProfessors));
+
+        // Fetch and display the total number of modules
+        int totalModules = moduleService.GetAllModules().size();
+        totalModulesLabel.setText(String.valueOf(totalModules));
+
+
     }
 
     @FXML

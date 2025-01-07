@@ -1,16 +1,15 @@
-
-
 module com.example.edoc {
-        requires javafx.controls;
-        requires javafx.fxml;
-        requires java.sql;
-        requires static lombok;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires java.sql;
+    requires static lombok;
 
 
     exports com.example.edoc;
     exports com.example.edoc.Controllers;
     exports com.example.edoc.Controllers.etudiant;
     exports com.example.edoc.Controllers.professeur;
+    opens com.example.edoc to javafx.fxml; // Open the package to javafx.fxml
 
     opens com.example.edoc.Entities to javafx.base;
     opens com.example.edoc.Controllers to javafx.fxml;

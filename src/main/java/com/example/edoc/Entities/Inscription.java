@@ -15,4 +15,11 @@ public class Inscription {
     private int etudiantId;
     private int moduleId;
     private Date dateInscription;
+
+    public Inscription( int id ,int etudiantId, int moduleId) {
+        this.id = id;
+        this.etudiantId = etudiantId;
+        this.moduleId = moduleId;
+        this.dateInscription = Date.valueOf(LocalDate.now());
+    }
 }
