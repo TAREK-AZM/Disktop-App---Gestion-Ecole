@@ -1,5 +1,8 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.Services.EtudiantService;
+import com.example.edoc.Services.ModuleService;
+import com.example.edoc.Services.ProfesseurService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,23 +28,41 @@ public class DashboardController {
     @FXML
     private Label mostFollowedModuleLabel;
 
+
+    private EtudiantService studentService = new EtudiantService();
+    private ProfesseurService professorService = new ProfesseurService();
+    private ModuleService moduleService = new ModuleService();
+
     @FXML
     public void initialize() {
-        // Initialize metrics (replace these with actual data retrieval logic)
-        loadMetrics();
+        showDashboard();
+      // Load the dashboard content by default
     }
 
-    private void loadMetrics() {
-        // Example: Fetch metrics from a service or database
-        // Replace with actual service calls
-        totalStudentsLabel.setText("120"); // Example value
-        totalProfessorsLabel.setText("15"); // Example value
-        totalModulesLabel.setText("8"); // Example value
-        mostFollowedModuleLabel.setText("Mathematics"); // Example value
+    private void loadStatistics() {
+        // Fetch and display the total number of students
+        int totalStudents = studentService.getAll().size();
+        totalStudentsLabel.setText(String.valueOf(totalStudents));
+
+        // Fetch and display the total number of professors
+        int totalProfessors = professorService.getAllProfesseur().size();
+        totalProfessorsLabel.setText(String.valueOf(totalProfessors));
+
+        // Fetch and display the total number of modules
+        int totalModules = moduleService.GetAllModules().size();
+        totalModulesLabel.setText(String.valueOf(totalModules));
+
+
     }
+
 
     @FXML
     public void showDashboard() {
+        loadView("dashboard-content.fxml"); // Load only the dashboard content
+        loadStatistics(); // Update the statistics
+    }
+    @FXML
+    public void retunshowDashboard() {
         loadView("admin-dashboard.fxml");
     }
 
@@ -76,6 +97,7 @@ public class DashboardController {
         // Implement sign-out logic
     }
 
+
     private void loadView(String fxmlFile) {
         try {
             Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
@@ -84,4 +106,6 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+
 }

@@ -14,8 +14,6 @@ public class DatabaseConnection {
 //    private final String password = ""  ;
 
 
-
-
     private DatabaseConnection(){
         try{
             // charger le driver de la connection
