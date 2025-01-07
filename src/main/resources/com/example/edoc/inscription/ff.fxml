@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+
+      style="-fx-background-color: linear-gradient(to bottom, #ffffff, #f0f8ff); -fx-padding: 20;">
+    <Label text="Manage Inscription" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <HBox spacing="15">
+        <Label text="Etudiant:" style="-fx-font-size: 14px;" />
+        <ComboBox fx:id="etudiantComboBox" prefWidth="200" />
+    </HBox>
+
+    <HBox spacing="15">
+        <Label text="Module:" style="-fx-font-size: 14px;" />
+        <ComboBox fx:id="moduleComboBox" prefWidth="200" />
+    </HBox>
+
+    <HBox spacing="15">
+        <Label text="Date of Inscription:" style="-fx-font-size: 14px;" />
+        <DatePicker fx:id="inscriptionDatePicker" />
+    </HBox>
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Save"
+                style="-fx-background-color: #42a5f5; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button text="Update"
+                style="-fx-background-color: #66bb6a; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button text="Cancel"
+                style="-fx-background-color: #ef5350; -fx-text-fill: white; -fx-font-weight: bold;" />
+    </HBox>
+</VBox>
