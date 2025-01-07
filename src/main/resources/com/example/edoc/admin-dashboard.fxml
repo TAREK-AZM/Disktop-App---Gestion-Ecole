@@ -10,12 +10,6 @@
     <!-- Left Sidebar -->
     <left>
         <VBox spacing="20" style="-fx-background-color: #ffffff;" prefWidth="250">
-            <Label fx:id="usernameLabel" />
-
-            <Label fx:id="roleLabel" />
-            <padding>
-                <Insets top="20" left="20" bottom="20" right="20"/>
-            </padding>
             <Label text="School Management" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
             <Separator />
             <VBox spacing="10">

@@ -3,46 +3,24 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.FontWeight?>
 
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
-            fx:controller="com.example.edoc.Controllers.DashboardController"
-            style="-fx-background-color: #f8f9fa;">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.DashboardContentController"
+      spacing="20" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #ffffff;">
 
     <!-- Profile Header -->
     <HBox alignment="CENTER_LEFT" spacing="20">
-        <!-- Profile Image -->
-
-
-        <!-- User Information -->
         <VBox alignment="CENTER_LEFT" spacing="5">
-
-            <Label fx:id="usernameLabel"
+            <Label fx:id="usernameLabel" text="Username"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+            <Label fx:id="roleLabel" text="Role"
                    style="-fx-font-size: 18px; -fx-text-fill: #666;" />
-            <Label fx:id="roleLabel"
-                   style="-fx-font-size: 16px; -fx-text-fill: #888;" />
         </VBox>
     </HBox>
 
-    <!-- Additional Information -->
-    <VBox alignment="CENTER_LEFT" spacing="10"
-          style="-fx-padding: 20; -fx-background-color: #f9f9f9; -fx-background-radius: 10;">
-        <Label text="Contact Information"
-               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-        <HBox spacing="10">
-            <Label text="Email:"
-                   style="-fx-font-size: 16px; -fx-text-fill: #666;" />
-            <Label fx:id="emailLabel" text="johndoe@example.com"
-                   style="-fx-font-size: 16px; -fx-text-fill: #333;" />
-        </HBox>
-    </VBox>
-
-
-</BorderPane>
+    <!-- Statistics Section -->
+</VBox>

@@ -9,29 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 
-@Data
-@NoArgsConstructor
 public class DashboardController {
-    @FXML
-    private Label usernameLabel;
-
-    @FXML
-    private Label prenomLabel;
-
-    @FXML
-    private Label emailLabel;
-
-    @FXML
-    private Label roleLabel;
-
-    private Utilisateur utilisateur;
-
     @FXML
     private StackPane contentArea;
 
@@ -44,30 +25,27 @@ public class DashboardController {
     @FXML
     private Label totalModulesLabel;
 
-    @FXML
-    private Label mostFollowedModuleLabel;
-
+    private Utilisateur utilisateur;
 
     private EtudiantService studentService = new EtudiantService();
     private ProfesseurService professorService = new ProfesseurService();
     private ModuleService moduleService = new ModuleService();
 
-
     @FXML
     public void initialize() {
-        loadStatistics();
-    }
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-        updateUI();
+        System.out.println("Initializing DashboardController...");
+        if (contentArea == null) {
+            System.err.println("contentArea is null!");
+        } else {
+            System.out.println("contentArea is initialized.");
+        }
+        showDashboard(); // Load the dashboard content by default
     }
 
-    private void updateUI() {
-        // Update the UI with the utilisateur data
-        if (utilisateur != null) {
-            usernameLabel.setText(utilisateur.getUsername());
-            roleLabel.setText(utilisateur.getRole());
-        }
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+        // We'll now pass the user info directly to the dashboard content
+        showDashboard(); // Refresh dashboard with user info
     }
 
     private void loadStatistics() {
@@ -82,13 +60,20 @@ public class DashboardController {
         // Fetch and display the total number of modules
         int totalModules = moduleService.GetAllModules().size();
         totalModulesLabel.setText(String.valueOf(totalModules));
-
-
     }
 
     @FXML
     public void showDashboard() {
-        loadView("admin-dashboard.fxml");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/dashboard-content.fxml"));
+            Parent view = loader.load();
+            DashboardContentController contentController = loader.getController();
+            contentController.setUtilisateur(utilisateur);
+            contentArea.getChildren().setAll(view);
+            loadStatistics(); // Update the statistics
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -100,6 +85,7 @@ public class DashboardController {
     public void showProfessors() {
         loadView("professeur/Professeurs.fxml");
     }
+
 
     @FXML
     public void showModules() {
@@ -124,7 +110,8 @@ public class DashboardController {
 
     private void loadView(String fxmlFile) {
         try {
-            Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/" + fxmlFile));
+            Parent view = loader.load();
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
