@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +14,5 @@ public class Inscription {
     private int id;
     private int etudiantId;
     private int moduleId;
-    private LocalDate dateInscription;
+    private Date dateInscription;
 }

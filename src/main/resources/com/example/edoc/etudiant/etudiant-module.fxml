@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.edoc.Controllers.etudiant.EtudiantModuleController" spacing="10" alignment="CENTER">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Title -->
+    <Label text="Modules for Student" >
+        <font>
+            <Font name="System Bold" size="18"/>
+        </font>
+    </Label>
+
+    <!-- ListView to display module names -->
+    <ListView fx:id="moduleListView" prefWidth="300" prefHeight="200"/>
+
+    <!-- Close Button -->
+    <Button text="Close" onAction="#handleCloseButton" prefWidth="100"/>
+</VBox>

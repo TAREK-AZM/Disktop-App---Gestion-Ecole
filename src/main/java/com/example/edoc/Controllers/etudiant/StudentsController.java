@@ -5,9 +5,11 @@ import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Inscription;
 import com.example.edoc.Entities.Module;
 import com.example.edoc.Services.EtudiantService;
+import com.example.edoc.Services.InscriptionService;
 import com.example.edoc.Services.ModuleService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,7 +23,9 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StudentsController {
 
@@ -63,6 +67,9 @@ public class StudentsController {
 
     @FXML
     private Button moduleButton;
+
+    @FXML
+    private Button showButton;
 
     @FXML
     private TextField searchNomField;
@@ -107,6 +114,7 @@ public class StudentsController {
             updateButton.setDisable(!rowSelected);
             deleteButton.setDisable(!rowSelected);
             moduleButton.setDisable(!rowSelected);
+            showButton.setDisable(!rowSelected);
             cancelButton.setDisable(false); // Always enable cancel
         });
     }
@@ -233,6 +241,7 @@ public class StudentsController {
         deleteButton.setDisable(true);
         cancelButton.setDisable(true);
         moduleButton.setDisable(true);
+        showButton.setDisable(true);
     }
 
     @FXML
@@ -257,21 +266,7 @@ public class StudentsController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(manageModuleView));
         stage.showAndWait();
-        Module selectedModule = modulesTable.getSelectionModel().getSelectedItem();
-        if (selectedModule != null) {
-            int idModule = selectedModule.getId();
-            // Assigner le module à l'étudiant
-            boolean success  ;
-            Inscription inscription=   new Inscription(1 , 2 , idModule , LocalDate.now()) ;  // Exemple de service
 
-            if (inscription != null) {
-                showAlert("Succès", "Le module a été assigné avec succès.", Alert.AlertType.INFORMATION);
-            } else {
-                showAlert("Erreur", "Une erreur s'est produite lors de l'assignation.", Alert.AlertType.ERROR);
-            }
-        } else {
-            showAlert("Aucune sélection", "Veuillez sélectionner un module.", Alert.AlertType.WARNING);
-        }
     }
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
@@ -280,5 +275,42 @@ public class StudentsController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    @FXML
+    public void showModules(ActionEvent actionEvent) throws IOException {
+        // Get the selected student
+        Etudiant selectedStudent = studentsTable.getSelectionModel().getSelectedItem();
+        if (selectedStudent == null) {
+            System.out.println("No student selected.");
+            return;
+        }
 
+        // Get the module IDs for the selected student
+        InscriptionService inscriptionService = new InscriptionService();
+        ModuleService moduleService = new ModuleService();
+        List<Integer> listIds = inscriptionService.getAllModulesIds(selectedStudent.getId());
+
+        // Retrieve the module names
+        List<String> moduleNames = new ArrayList<>();
+        for (Integer idModule : listIds) {
+            Optional<Module> module = moduleService.GetModuleById(idModule);
+            if (module != null) {
+                moduleNames.add(module.get().getNomModule());
+            }
+        }
+
+        // Load the new view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/etudiant-module.fxml"));
+        Parent manageModuleView = loader.load();
+
+        // Get the controller of the new view and set the module names
+        EtudiantModuleController etudiantModuleController = loader.getController();
+        etudiantModuleController.setModuleNames(moduleNames);
+
+        // Display the new view
+        Stage stage = new Stage(StageStyle.UNDECORATED);
+        stage.setTitle("Manage Modules for Student");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(manageModuleView));
+        stage.showAndWait();
+    }
 }

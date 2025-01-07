@@ -39,4 +39,7 @@ public class EtudiantService {
         return etudiantDAO.getAll();
     }
 
+    // find id by nom pour l'insertion dans la table
+    public int findByNom(String nom){return  etudiantDAO.findByUserName(nom) ; }
+
 }

@@ -1,8 +1,10 @@
 package com.example.edoc.Controllers.etudiant;
 
 import com.example.edoc.Entities.Etudiant;
+import com.example.edoc.Entities.Inscription;
 import com.example.edoc.Entities.Module;
 import com.example.edoc.Services.EtudiantService;
+import com.example.edoc.Services.InscriptionService;
 import com.example.edoc.Services.ModuleService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +12,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class ManageEtudiantModulesController {
 
@@ -27,7 +32,7 @@ public class ManageEtudiantModulesController {
 
     private final EtudiantService etudiantService = new EtudiantService();
     private final ModuleService moduleService = new ModuleService();
-
+    private final InscriptionService inscriptionService =new InscriptionService();
     @FXML
     public void initialize() {
         loadDropdowns();
@@ -48,7 +53,7 @@ public class ManageEtudiantModulesController {
         // Load students
         ObservableList<String> studentNames = FXCollections.observableArrayList(
                 etudiantService.getAll().stream()
-                        .map(Etudiant::getNom) // Assuming Etudiant has a getName() method
+                        .map(Etudiant::getNom ) // Assuming Etudiant has a getName() method
                         .toList()
         );
         studentDropdown.setItems(studentNames);
@@ -75,7 +80,13 @@ public class ManageEtudiantModulesController {
         String selectedModuleName = moduleDropdown.getSelectionModel().getSelectedItem();
 
         if (selectedEtudiantName != null && selectedModuleName != null) {
-
+        int idEtudiant = etudiantService.findByNom(selectedEtudiantName);
+        int idModule = moduleService.findByName(selectedModuleName);
+        Inscription inscription = new Inscription() ;
+        inscription.setEtudiantId(idEtudiant);
+        inscription.setModuleId(idModule);
+        inscription.setDateInscription(Date.valueOf(LocalDate.now()));
+        inscriptionService.create(inscription);
             System.out.println("Module assigned successfully!");
         } else {
                 System.out.println("Failed to assign module.");

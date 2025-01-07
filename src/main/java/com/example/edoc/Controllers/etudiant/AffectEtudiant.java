@@ -62,16 +62,9 @@ public class AffectEtudiant {
         if (selectedModule != null) {
             int idModule = selectedModule.getId();
             // Assigner le module à l'étudiant
-            boolean success  ;
-                 Inscription inscription=   new Inscription(1 , 2 , idModule , LocalDate.now()) ;  // Exemple de service
+            boolean success;
+            // Exemple de service
 
-            if (inscription != null) {
-                showAlert("Succès", "Le module a été assigné avec succès.", Alert.AlertType.INFORMATION);
-            } else {
-                showAlert("Erreur", "Une erreur s'est produite lors de l'assignation.", Alert.AlertType.ERROR);
-            }
-        } else {
-            showAlert("Aucune sélection", "Veuillez sélectionner un module.", Alert.AlertType.WARNING);
         }
     }
 
