@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.edoc.Controllers.etudiant.EtudiantChartController" spacing="10"
+      style="
+            -fx-background-color: linear-gradient(to bottom, #b9edf8, #6eeac5);"
+>
+
+    <!-- Label to display the total number of students -->
+    <Label fx:id="totalStudentsLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+
+    <!-- Container to hold multiple charts -->
+    <VBox fx:id="chartContainer" spacing="20">
+        <!-- BarChart for student distribution by module -->
+        <BarChart fx:id="studentsBarChart">
+            <xAxis>
+                <CategoryAxis fx:id="xAxis" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" />
+            </yAxis>
+        </BarChart>
+    </VBox>
+
+</VBox>

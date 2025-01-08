@@ -1,6 +1,8 @@
 package com.example.edoc;
 
 import com.example.edoc.Controllers.DashboardController;
+import com.example.edoc.Controllers.ProfDashboardController;
+import com.example.edoc.Controllers.SecretaireDashboardController;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.UtilisateurService; // Replace with your service package
 import javafx.fxml.FXML;
@@ -52,13 +54,13 @@ public class LoginController {
 
         Utilisateur isAuthenticated = userService.login(email, password);
 
-        if (isAuthenticated != null && isAuthenticated.getRole().equals("admin")) {
+        if (isAuthenticated != null && isAuthenticated.getRole().equalsIgnoreCase("admin")) {
             errorMessage.setVisible(false);
             navigateToAdminDashboard(isAuthenticated); // Pass the authenticated user
-        } else if (isAuthenticated != null && isAuthenticated.getRole().equals("secretaire")) {
+        } else if (isAuthenticated != null && isAuthenticated.getRole().equalsIgnoreCase("secretaire")) {
             errorMessage.setVisible(false);
             navigateToSecretaireDashboard(isAuthenticated); // Pass the authenticated user
-        } else if (isAuthenticated != null && isAuthenticated.getRole().equals("professeur")) {
+        } else if (isAuthenticated != null && isAuthenticated.getRole().equalsIgnoreCase("professeur")) {
             errorMessage.setVisible(false);
             navigateToProfDashboard(isAuthenticated); // Pass the authenticated user
         } else {
@@ -73,8 +75,8 @@ public class LoginController {
             Parent dashboardRoot = loader.load();
 
             // Get the controller and set the utilisateur
-            //ProfDashboardController controller = loader.getController();
-            //controller.setUtilisateur(utilisateur);
+            ProfDashboardController controller = loader.getController();
+            controller.setUtilisateur(utilisateur);
 
             // Get the current stage
             Stage stage = (Stage) emailField.getScene().getWindow();
@@ -92,8 +94,8 @@ public class LoginController {
             Parent dashboardRoot = loader.load();
 
             // Get the controller and set the utilisateur
-            //SecretaireDashboardController controller = loader.getController();
-            //controller.setUtilisateur(utilisateur);
+            SecretaireDashboardController controller = loader.getController();
+            controller.setUtilisateur(utilisateur);
 
             // Get the current stage
             Stage stage = (Stage) emailField.getScene().getWindow();

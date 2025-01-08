@@ -1,5 +1,6 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.Controllers.etudiant.EtudiantChartController;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.ModuleService;
@@ -44,7 +45,6 @@ public class DashboardController {
 
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
-        // We'll now pass the user info directly to the dashboard content
         showDashboard(); // Refresh dashboard with user info
     }
 
@@ -67,10 +67,16 @@ public class DashboardController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/dashboard-content.fxml"));
             Parent view = loader.load();
+
+            // Get the DashboardContentController and set the utilisateur
             DashboardContentController contentController = loader.getController();
             contentController.setUtilisateur(utilisateur);
+            EtudiantChartController etudiant_Graphe = new EtudiantChartController();
+            // Load the view into the contentArea
             contentArea.getChildren().setAll(view);
-            loadStatistics(); // Update the statistics
+
+            // Load statistics
+            loadStatistics();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,10 +88,14 @@ public class DashboardController {
     }
 
     @FXML
+    public void showStudentsGraphes() {
+        loadView("etudiant/etudiantGraphes.fxml");
+    }
+
+    @FXML
     public void showProfessors() {
         loadView("professeur/Professeurs.fxml");
     }
-
 
     @FXML
     public void showModules() {

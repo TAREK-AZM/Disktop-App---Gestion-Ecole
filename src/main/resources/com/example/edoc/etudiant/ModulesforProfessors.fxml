@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.module.ModulesController"
+      style="-fx-background-color: linear-gradient(to bottom, #ffffff, #f0f8ff); -fx-padding: 20;">
+    <Label text="Module Management" style="-fx-font-size: 24px; -fx-font-weight: bold;" alignment="CENTER" />
+
+    <HBox spacing="15" alignment="CENTER"
+          style="-fx-background-color: #e3f2fd; -fx-border-color: #90caf9; -fx-border-radius: 10; -fx-padding: 10; -fx-background-radius: 10;">
+        <TextField fx:id="searchNomField" promptText="Search by Name"
+                   style="-fx-font-size: 14px; -fx-padding: 8; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+        <TextField fx:id="searchCodeField" promptText="Search by Code"
+                   style="-fx-font-size: 14px; -fx-padding: 8; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+        <Button text="Search" onAction="#handleSearch"
+                style="-fx-background-color: #42a5f5; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
+    </HBox>
+
+    <TableView fx:id="modulesTable">
+        <columns>
+            <TableColumn text="ID" fx:id="idColumn" prefWidth="200" />
+            <TableColumn text="Name" fx:id="nomModuleColumn" prefWidth="200"/>
+            <TableColumn text="Code" fx:id="codeModuleColumn" prefWidth="200"/>
+            <TableColumn text="Professor ID" fx:id="professeurIdColumn" prefWidth="200" />
+        </columns>
+    </TableView>
+</VBox>

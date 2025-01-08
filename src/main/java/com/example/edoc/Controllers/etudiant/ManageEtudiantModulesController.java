@@ -9,6 +9,7 @@ import com.example.edoc.Services.ModuleService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -87,11 +88,20 @@ public class ManageEtudiantModulesController {
         inscription.setModuleId(idModule);
         inscription.setDateInscription(Date.valueOf(LocalDate.now()));
         inscriptionService.create(inscription);
-            System.out.println("Module assigned successfully!");
+            // Show a success message
+            showAlert("Success", "Module assigned successfully!", Alert.AlertType.INFORMATION);
         } else {
-                System.out.println("Failed to assign module.");
-            }
+            // Show an error message
+            showAlert("Error", "Failed to assign module. Please select both a student and a module.", Alert.AlertType.ERROR);
+        }
+    }
 
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // No header text
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

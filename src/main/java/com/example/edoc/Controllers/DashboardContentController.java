@@ -1,59 +1,59 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.Controllers.etudiant.EtudiantChartController;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.ModuleService;
 import com.example.edoc.Services.ProfesseurService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 public class DashboardContentController {
-    @FXML
-    private Label usernameLabel;
 
     @FXML
-    private Label roleLabel;
+    private VBox chartContainer;
 
-    @FXML
-    private Label totalStudentsLabel;
-
-    @FXML
-    private Label totalProfessorsLabel;
-
-    @FXML
-    private Label totalModulesLabel;
-
-    private EtudiantService studentService;
-    private ProfesseurService professorService;
+    private Utilisateur utilisateur;
+    private EtudiantService etudiantService;
     private ModuleService moduleService;
-
-    public void setServices(EtudiantService studentService, ProfesseurService professorService, ModuleService moduleService) {
-        this.studentService = studentService;
-        this.professorService = professorService;
-        this.moduleService = moduleService;
-        loadStatistics(); // Load statistics after services are set
-    }
+    private ProfesseurService professeurService;
 
     public void setUtilisateur(Utilisateur utilisateur) {
-        if (utilisateur != null) {
-            usernameLabel.setText(utilisateur.getUsername());
-            roleLabel.setText(utilisateur.getRole());
-        }
+        this.utilisateur = utilisateur;
     }
 
-    private void loadStatistics() {
-        if (studentService != null && professorService != null && moduleService != null) {
-            // Fetch and display the total number of students
-            int totalStudents = studentService.getAll().size();
-            totalStudentsLabel.setText(String.valueOf(totalStudents));
+    public void setServices(EtudiantService etudiantService,
+                            ModuleService moduleService,
+                            ProfesseurService professeurService) {
+        this.etudiantService = etudiantService;
+        this.moduleService = moduleService;
+        this.professeurService = professeurService;
+        loadCharts();
+    }
 
-            // Fetch and display the total number of professors
-            int totalProfessors = professorService.getAllProfesseur().size();
-            totalProfessorsLabel.setText(String.valueOf(totalProfessors));
 
-            // Fetch and display the total number of modules
-            int totalModules = moduleService.GetAllModules().size();
-            totalModulesLabel.setText(String.valueOf(totalModules));
+
+    private void loadCharts() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/etudiant/etudiantGraphes.fxml"));
+            VBox chartsView = loader.load();
+
+            EtudiantChartController chartController = loader.getController();
+            chartController.setEtudiantService(etudiantService);
+            chartController.setModuleService(moduleService);
+
+            // Initialize the charts
+            chartController.initialize();
+
+            // Add the charts to the container
+            chartContainer.getChildren().clear();
+            chartContainer.getChildren().add(chartsView);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

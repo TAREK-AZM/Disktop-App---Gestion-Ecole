@@ -6,7 +6,10 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
             fx:controller="com.example.edoc.Controllers.DashboardController"
-            style="-fx-background-color: #f8f9fa;">
+            style="-fx-background-color: #f8f9fa;
+            -fx-background-color: linear-gradient(to bottom, #ffffff, #f0f8ff);"
+
+>
     <!-- Left Sidebar -->
     <left>
         <VBox spacing="20" style="-fx-background-color: #ffffff;" prefWidth="250">
@@ -21,14 +24,15 @@
                         style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
                 <Button text="Modules" fx:id="modulesBtn" onAction="#showModules"
                         style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
-                <Button text="Enrollments" fx:id="enrollmentsBtn" onAction="#showEnrollments"
+                <Button text="graphes" fx:id="graphes" onAction="#showStudentsGraphes"
                         style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
+
+
+
             </VBox>
             <Separator />
-            <VBox spacing="10">
+            <VBox spacing="20">
                 <Label text="ACCOUNT PAGES" style="-fx-text-fill: #333; -fx-font-size: 14px;" />
-                <Button text="Profile" fx:id="profileBtn" onAction="#showProfile"
-                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
                 <Button text="Sign Out" fx:id="signOutBtn" onAction="#handleSignOut"
                         style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
             </VBox>
