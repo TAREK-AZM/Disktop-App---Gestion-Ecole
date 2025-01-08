@@ -19,22 +19,40 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfDashboardController {
+
+    /// navbar buttons
+    @FXML
+    public Button dashboardBtn;
+
+    @FXML
+    public Button studentsBtn;
+
+    @FXML
+    public Button professorsBtn;
+
+    @FXML
+    public Button modulesBtn;
+
+    @FXML
+    public Button signOutBtn;
+
+
+    ///
     @FXML
     private Label usernameLabel;
-    @FXML
-    private Button signOutBtn ;
-
-
     @FXML
     private Label roleLabel;
 
     private Utilisateur utilisateur;
 
+    ///////
     @FXML
     private StackPane contentArea;
 
@@ -47,8 +65,11 @@ public class ProfDashboardController {
     @FXML
     private Label totalModulesLabel;
 
-    @FXML
-    private Label mostFollowedModuleLabel;
+//    @FXML
+//    private Label mostFollowedModuleLabel;
+
+    private Button activeButton;
+    private final List<Button> navigationButtons = new ArrayList<>();
 
     private void loadStatistics() {
         // Fetch and display the total number of students
@@ -71,7 +92,18 @@ public class ProfDashboardController {
 
     @FXML
     public void initialize() {
+
         loadStatistics();
+
+        // Add all navigation buttons to the list
+        navigationButtons.add(dashboardBtn);
+        navigationButtons.add(studentsBtn);
+        navigationButtons.add(professorsBtn);
+        navigationButtons.add(modulesBtn);
+        navigationButtons.add(signOutBtn);
+
+        // Set the default active button
+        setActiveButton(dashboardBtn);
     }
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
@@ -96,10 +128,7 @@ public class ProfDashboardController {
     }
 
 
-//    @FXML
-//    public void showDashboard(ActionEvent actionEvent) {
-//        loadView("admin-dashboard.fxml");
-//    }
+
 private void loadView(String fxmlFile) {
     try {
         Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
@@ -129,6 +158,24 @@ private void loadView(String fxmlFile) {
             e.printStackTrace();
             System.err.println("Failed to load login page.");
         }
+    }
+
+
+
+    private void setActiveButton(Button button) {
+        if (activeButton != null) {
+            resetButtonStyle(activeButton);
+        }
+        applyActiveStyle(button);
+        activeButton = button;
+    }
+
+    private void resetButtonStyle(Button button) {
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;");
+    }
+
+    private void applyActiveStyle(Button button) {
+        button.setStyle("-fx-background-color: #20c997; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
     }
 
 

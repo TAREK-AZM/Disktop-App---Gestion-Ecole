@@ -8,7 +8,7 @@
       style="-fx-background-color: linear-gradient(to bottom, #ffffff, #f0f8ff); -fx-padding: 20;">
     <Label text="Module Management" style="-fx-font-size: 24px; -fx-font-weight: bold;" alignment="CENTER" />
 
-    <HBox spacing="15" alignment="CENTER"
+    <HBox spacing="15" alignment="CENTER_RIGHT"
           style="-fx-background-color: #e3f2fd; -fx-border-color: #90caf9; -fx-border-radius: 10; -fx-padding: 10; -fx-background-radius: 10;">
         <TextField fx:id="searchNomField" promptText="Search by Name"
                    style="-fx-font-size: 14px; -fx-padding: 8; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
