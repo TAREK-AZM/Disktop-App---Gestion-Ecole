@@ -14,14 +14,13 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
 
     @Override
     public boolean create(Professeur professeur) {
-        String requete = "insert into professeurs values(?, ? , ? , ?)" ;
+        String requete = "insert into professeurs values( ? , ? , ?)" ;
         try {
             preparedStatement = connection.prepareStatement(requete);
             // the id is autoincrement in the db
-            preparedStatement.setInt(1, professeur.getId());
-            preparedStatement.setString(2,professeur.getNom());
-            preparedStatement.setString(3,professeur.getPrenom());
-            preparedStatement.setString(4,professeur.getSpecialite());
+            preparedStatement.setString(1,professeur.getNom());
+            preparedStatement.setString(2,professeur.getPrenom());
+            preparedStatement.setString(3,professeur.getSpecialite());
             preparedStatement.executeUpdate();
             System.out.println("professeur created");
             // insert it then in the utilisateurs table
