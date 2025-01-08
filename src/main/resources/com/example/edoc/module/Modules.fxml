@@ -29,7 +29,7 @@
 
     <!-- Action Buttons Section -->
     <HBox spacing="15" alignment="CENTER">
-        <Button fx:id="addButton" text="Add New Student" onAction="#handleAdd"
+        <Button fx:id="addButton" text="Add New Module" onAction="#handleAdd"
                 style="-fx-background-color: linear-gradient(to right, #66bb6a, #43a047); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
         <Button fx:id="updateButton" text="Update" disable="true" onAction="#handleUpdate"
                 style="-fx-background-color: linear-gradient(to right, #42a5f5, #1e88e5); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />

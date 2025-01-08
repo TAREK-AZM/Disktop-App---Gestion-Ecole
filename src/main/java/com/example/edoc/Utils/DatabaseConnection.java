@@ -19,8 +19,8 @@ public class DatabaseConnection {
     private DatabaseConnection(){
         try{
             // charger le driver de la connection
-            Class.forName("org.postgresql.Driver");
-//            Class.forName("com.mysql.cj.jdbc.Driver");
+            //Class.forName("org.postgresql.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             // creer la connection
             connection= DriverManager.getConnection(url, username, password) ;
             System.out.println("connection succeded");

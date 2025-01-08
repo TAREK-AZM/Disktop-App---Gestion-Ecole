@@ -109,7 +109,7 @@ public class ModulesController {
             Parent addView = loader.load();
 
             Stage stage = new Stage(StageStyle.UNDECORATED);
-            stage.setTitle("Add New Student");
+            stage.setTitle("Add New Module");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(addView));
             stage.showAndWait();
