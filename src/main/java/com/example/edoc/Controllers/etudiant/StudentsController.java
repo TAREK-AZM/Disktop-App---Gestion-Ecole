@@ -24,8 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/// import files manager tools
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+///// xlx execl file
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class StudentsController {
 
+    public Button downloadCsvButton;
     @FXML
     private TableView<Etudiant> studentsTable;
 
@@ -302,6 +317,106 @@ public class StudentsController {
         stage.showAndWait();
     }
 
+
+    @FXML
+    private void handleDownloadCsv() {
+        // Get the current items in the TableView (filtered or unfiltered)
+        ObservableList<Etudiant> students = studentsTable.getItems();
+
+        if (students.isEmpty()) {
+            showAlert("No Data", "There is no data to export.");
+            return;
+        }
+
+        // Create a FileChooser to let the user choose where to save the CSV file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(studentsTable.getScene().getWindow());
+
+        if (file != null) {
+            try (FileWriter writer = new FileWriter(file)) {
+                // Write the CSV header
+                writer.write("ID,Matricule,Nom,Prenom,Email,Promo,Date Naissance\n");
+
+                // Write each student's data to the CSV file
+                for (Etudiant student : students) {
+                    writer.write(
+                            student.getId() + "," +
+                                    student.getMatricule() + "," +
+                                    student.getNom() + "," +
+                                    student.getPrenom() + "," +
+                                    student.getEmail() + "," +
+                                    student.getPromo() + "," +
+                                    student.getDateNaissance() + "\n"
+                    );
+                }
+
+                showAlert("Success", "CSV file has been saved successfully.");
+            } catch (IOException e) {
+                showAlert("Error", "An error occurred while saving the CSV file: " + e.getMessage());
+            }
+        }
+    }
+
+    @FXML
+    private void handleDownloadExcel() {
+        // Get the current items in the TableView (filtered or unfiltered)
+        ObservableList<Etudiant> students = studentsTable.getItems();
+
+        if (students.isEmpty()) {
+            showAlert("No Data", "There is no data to export.");
+            return;
+        }
+
+        // Create a FileChooser to let the user choose where to save the Excel file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Excel File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        File file = fileChooser.showSaveDialog(studentsTable.getScene().getWindow());
+
+        if (file != null) {
+            try (Workbook workbook = new XSSFWorkbook()) {
+                // Create a new sheet in the workbook
+                Sheet sheet = workbook.createSheet("Students");
+
+                // Create the header row
+                Row headerRow = sheet.createRow(0);
+                String[] columns = {"ID", "Matricule", "Nom", "Prenom", "Email", "Promo", "Date Naissance"};
+                for (int i = 0; i < columns.length; i++) {
+                    Cell cell = headerRow.createCell(i);
+                    cell.setCellValue(columns[i]);
+                }
+
+                // Write each student's data to the sheet
+                int rowNum = 1;
+                for (Etudiant student : students) {
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(student.getId());
+                    row.createCell(1).setCellValue(student.getMatricule());
+                    row.createCell(2).setCellValue(student.getNom());
+                    row.createCell(3).setCellValue(student.getPrenom());
+                    row.createCell(4).setCellValue(student.getEmail());
+                    row.createCell(5).setCellValue(student.getPromo());
+                    row.createCell(6).setCellValue(student.getDateNaissance().toString());
+                }
+
+                // Auto-size columns
+                for (int i = 0; i < columns.length; i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Write the workbook to the file
+                try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                    workbook.write(fileOut);
+                }
+
+                showAlert("Success", "Excel file has been saved successfully.");
+            } catch (IOException e) {
+                showAlert("Error", "An error occurred while saving the Excel file: " + e.getMessage());
+            }
+        }
+    }
     @FXML
     public void showModules(ActionEvent actionEvent) throws IOException {
         // Get the selected student
@@ -337,5 +452,15 @@ public class StudentsController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(manageModuleView));
         stage.showAndWait();
+    }
+
+
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
