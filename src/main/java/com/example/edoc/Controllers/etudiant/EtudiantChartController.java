@@ -4,6 +4,7 @@ import com.example.edoc.DAO.InscriptionDAO;
 import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Inscription;
 import com.example.edoc.Entities.Module;
+import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.ModuleService;
 import javafx.collections.FXCollections;
@@ -16,16 +17,12 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Data
-@AllArgsConstructor
 public class EtudiantChartController {
 
     @FXML
@@ -46,13 +43,16 @@ public class EtudiantChartController {
     @FXML
     private VBox chartContainer; // Container to hold multiple charts
 
-    private EtudiantService etudiantService; // Service to fetch student data
-    private ModuleService moduleService; // Service to fetch module data
+    // Setter for Utilisateur
+    @Setter
+    private Utilisateur utilisateur;
 
-    public EtudiantChartController() {
-        this.etudiantService = new EtudiantService(); // Initialize the service
-        this.moduleService = new ModuleService(); // Initialize the module service
-    }
+    // Setter for EtudiantService
+    @Setter
+    private EtudiantService etudiantService; // Service to fetch student data
+    // Setter for ModuleService
+    @Setter
+    private ModuleService moduleService; // Service to fetch module data
 
     // Method to initialize the chart
     @FXML
@@ -60,6 +60,7 @@ public class EtudiantChartController {
         // Fetch all students and modules from the database
         List<Etudiant> etudiants = etudiantService.getAll();
         List<Module> modules = moduleService.GetAllModules();
+
 
 
         // Create a PieChart for student distribution by promotion

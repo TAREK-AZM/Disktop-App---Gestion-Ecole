@@ -13,8 +13,6 @@
             -fx-background-color: linear-gradient(to bottom, #b9edf8, #6eeac5);"
 >
 
-    <!-- Label to display the total number of students -->
-    <Label fx:id="totalStudentsLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
     <!-- Container to hold multiple charts -->
     <VBox fx:id="chartContainer" spacing="20">
