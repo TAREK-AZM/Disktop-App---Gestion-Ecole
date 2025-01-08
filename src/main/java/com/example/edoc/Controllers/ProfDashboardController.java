@@ -28,11 +28,7 @@ public class ProfDashboardController {
     private Label usernameLabel;
     @FXML
     private Button signOutBtn ;
-    @FXML
-    private Label prenomLabel;
 
-    @FXML
-    private Label emailLabel;
 
     @FXML
     private Label roleLabel;

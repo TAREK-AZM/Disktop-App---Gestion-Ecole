@@ -29,8 +29,6 @@
             <Separator />
             <VBox spacing="10">
                 <Label text="ACCOUNT PAGES" style="-fx-text-fill: #333; -fx-font-size: 14px;" />
-                <Button text="Profile" fx:id="profileBtn"
-                        style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
                 <Button text="Sign Out" onAction="#handleSignOut" fx:id="signOutBtn"
                         style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;" />
             </VBox>

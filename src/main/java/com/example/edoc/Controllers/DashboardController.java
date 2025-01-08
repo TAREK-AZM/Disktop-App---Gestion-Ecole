@@ -7,33 +7,30 @@ import com.example.edoc.Services.ProfesseurService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
-@NoArgsConstructor
 public class DashboardController {
-    @FXML
-    private Label usernameLabel;
 
     @FXML
-    private Label prenomLabel;
+    public Button dashboardBtn;
 
     @FXML
-    private Label emailLabel;
+    public Button studentsBtn;
 
     @FXML
-    private Label roleLabel;
+    public Button professorsBtn;
 
-    private Utilisateur utilisateur;
+    @FXML
+    public Button modulesBtn;
+
+    @FXML
+    public Button signOutBtn;
 
     @FXML
     private StackPane contentArea;
@@ -47,118 +44,116 @@ public class DashboardController {
     @FXML
     private Label totalModulesLabel;
 
-    @FXML
-    private Label mostFollowedModuleLabel;
+    private Utilisateur utilisateur;
+    private Button activeButton;
+    private final List<Button> navigationButtons = new ArrayList<>();
 
-    @FXML
-    private Button signOutBtn ;
-
-    private EtudiantService studentService = new EtudiantService();
-    private ProfesseurService professorService = new ProfesseurService();
-    private ModuleService moduleService = new ModuleService();
-
+    private final EtudiantService studentService = new EtudiantService();
+    private final ProfesseurService professorService = new ProfesseurService();
+    private final ModuleService moduleService = new ModuleService();
 
     @FXML
     public void initialize() {
-        loadStatistics();
-    }
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-        updateUI();
+        System.out.println("Initializing DashboardController...");
+
+        // Add all navigation buttons to the list
+        navigationButtons.add(dashboardBtn);
+        navigationButtons.add(studentsBtn);
+        navigationButtons.add(professorsBtn);
+        navigationButtons.add(modulesBtn);
+        navigationButtons.add(signOutBtn);
+
+        // Set the default active button
+        setActiveButton(dashboardBtn);
+        showDashboard(); // Load the dashboard content by default
     }
 
-    private void updateUI() {
-        // Update the UI with the utilisateur data
-        if (utilisateur != null) {
-            usernameLabel.setText(utilisateur.getUsername());
-            roleLabel.setText(utilisateur.getRole());
-        }
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+        showDashboard(); // Refresh dashboard with user info
     }
 
     private void loadStatistics() {
-        // Fetch and display the total number of students
         int totalStudents = studentService.getAll().size();
         totalStudentsLabel.setText(String.valueOf(totalStudents));
 
-        // Fetch and display the total number of professors
         int totalProfessors = professorService.getAllProfesseur().size();
         totalProfessorsLabel.setText(String.valueOf(totalProfessors));
 
-        // Fetch and display the total number of modules
         int totalModules = moduleService.GetAllModules().size();
         totalModulesLabel.setText(String.valueOf(totalModules));
-
-
     }
 
     @FXML
     public void showDashboard() {
-        loadView("admin-dashboard.fxml");
+        dashboardBtn.requestFocus();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/dashboard-content.fxml"));
+            Parent view = loader.load();
+
+            // Get the DashboardContentController and set the services
+            DashboardContentController contentController = loader.getController();
+            contentController.setUtilisateur(utilisateur);
+            contentController.setServices(studentService, moduleService, professorService);
+
+            // Load the view into the contentArea
+            contentArea.getChildren().setAll(view);
+
+            // Load statistics
+            loadStatistics();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void showStudents() {
+        setActiveButton(studentsBtn);
         loadView("etudiant/Students.fxml");
-    }
-    @FXML
-    public void showStudentsforProfessores() {
-        loadView("etudiant/StudentsforProfessores.fxml");
-    }
-    @FXML
-    public  void showModulesforProfessors(){
-        loadView("etudiant/ModulesforProfessors.fxml");
     }
 
     @FXML
     public void showProfessors() {
+        setActiveButton(professorsBtn);
         loadView("professeur/Professeurs.fxml");
     }
 
     @FXML
     public void showModules() {
+        setActiveButton(modulesBtn);
         loadView("module/Modules.fxml");
     }
 
     @FXML
-    public void showEnrollments() {
-        loadView("Enrollments.fxml");
-    }
-
-    @FXML
-    public void showProfile() {
-        loadView("Profile.fxml");
-    }
-
-    @FXML
     public void handleSignOut() {
+        setActiveButton(signOutBtn);
         System.out.println("Signing out...");
-
-        try {
-            // Load the login page FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/login.fxml"));
-            Parent loginRoot = loader.load();
-
-            // Get the current stage
-            Stage stage = (Stage) signOutBtn.getScene().getWindow();
-
-            // Set the login page as the current scene
-            stage.setScene(new Scene(loginRoot));
-            stage.setTitle("Login");
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Failed to load login page.");
-        }
+        // Implement sign-out logic
     }
-
 
     private void loadView(String fxmlFile) {
         try {
-            Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/" + fxmlFile));
+            Parent view = loader.load();
             contentArea.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setActiveButton(Button button) {
+        if (activeButton != null) {
+            resetButtonStyle(activeButton);
+        }
+        applyActiveStyle(button);
+        activeButton = button;
+    }
+
+    private void resetButtonStyle(Button button) {
+        button.setStyle("-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-size: 14px;");
+    }
+
+    private void applyActiveStyle(Button button) {
+        button.setStyle("-fx-background-color: #20c997; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
     }
 }

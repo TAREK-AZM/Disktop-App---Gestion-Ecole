@@ -54,13 +54,13 @@ public class LoginController {
 
         Utilisateur isAuthenticated = userService.login(email, password);
 
-        if (isAuthenticated != null && isAuthenticated.getRole().equals("admin")) {
+        if (isAuthenticated != null && isAuthenticated.getRole().equalsIgnoreCase("admin")) {
             errorMessage.setVisible(false);
             navigateToAdminDashboard(isAuthenticated); // Pass the authenticated user
-        } else if (isAuthenticated != null && isAuthenticated.getRole().equals("secretaire")) {
+        } else if (isAuthenticated != null && isAuthenticated.getRole().equalsIgnoreCase("secretaire")) {
             errorMessage.setVisible(false);
             navigateToSecretaireDashboard(isAuthenticated); // Pass the authenticated user
-        } else if (isAuthenticated != null && isAuthenticated.getRole().equals("professeur")) {
+        } else if (isAuthenticated != null && isAuthenticated.getRole().equalsIgnoreCase("professeur")) {
             errorMessage.setVisible(false);
             navigateToProfDashboard(isAuthenticated); // Pass the authenticated user
         } else {

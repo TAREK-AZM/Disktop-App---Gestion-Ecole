@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.layout.StackPane?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.edoc.Controllers.DashboardContentController" spacing="10"
+      style="-fx-background-color: linear-gradient(to bottom, #b9edf8, #6eeac5);"
+>
+
+
+
+    <!-- Charts Section -->
+    <VBox spacing="20">
+        <!-- PieChart for student distribution by promotion -->
+        <PieChart fx:id="studentsPieChart" title="Répartition des étudiants par promotion" />
+
+        <!-- BarChart for student distribution by module -->
+        <BarChart fx:id="studentsBarChart" title="Répartition des étudiants par module">
+            <xAxis>
+                <CategoryAxis fx:id="xAxis" label="Modules" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" label="Nombre d'étudiants" />
+            </yAxis>
+        </BarChart>
+    </VBox>
+
+</VBox>
