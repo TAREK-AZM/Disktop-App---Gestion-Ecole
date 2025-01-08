@@ -1,5 +1,8 @@
 package com.example.edoc;
 
+import com.example.edoc.Controllers.DashboardController;
+import com.example.edoc.Controllers.ProfDashboardController;
+import com.example.edoc.Controllers.SecretaireDashboardController;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.UtilisateurService; // Replace with your service package
 import javafx.fxml.FXML;
@@ -53,29 +56,74 @@ public class LoginController {
 
         if (isAuthenticated != null && isAuthenticated.getRole().equals("admin")) {
             errorMessage.setVisible(false);
-            navigateToAdminDashboard();
+            navigateToAdminDashboard(isAuthenticated); // Pass the authenticated user
         } else if (isAuthenticated != null && isAuthenticated.getRole().equals("secretaire")) {
             errorMessage.setVisible(false);
-            navigateToSecretaireDashboard();
+            navigateToSecretaireDashboard(isAuthenticated); // Pass the authenticated user
         } else if (isAuthenticated != null && isAuthenticated.getRole().equals("professeur")) {
             errorMessage.setVisible(false);
-            navigateToProfDashboard();
+            navigateToProfDashboard(isAuthenticated); // Pass the authenticated user
         } else {
             errorMessage.setText("Invalid email or password.");
             errorMessage.setVisible(true);
         }
     }
 
-    private void navigateToProfDashboard() {
-        System.out.println("Navigating to Prof Dashboard...");
+    private void navigateToProfDashboard(Utilisateur utilisateur) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/prof-dashboard.fxml"));
+            Parent dashboardRoot = loader.load();
+
+            // Get the controller and set the utilisateur
+            ProfDashboardController controller = loader.getController();
+            controller.setUtilisateur(utilisateur);
+
+            // Get the current stage
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(dashboardRoot));
+            stage.setTitle("Professor Dashboard");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void navigateToSecretaireDashboard() {
-        System.out.println("Navigating to Secretaire Dashboard...");
+    private void navigateToSecretaireDashboard(Utilisateur utilisateur) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/secretaire-dashboard.fxml"));
+            Parent dashboardRoot = loader.load();
+
+            // Get the controller and set the utilisateur
+            SecretaireDashboardController controller = loader.getController();
+            controller.setUtilisateur(utilisateur);
+
+            // Get the current stage
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(dashboardRoot));
+            stage.setTitle("Secretaire Dashboard");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void navigateToAdminDashboard() {
-        System.out.println("navigating to admin dashboard...");
+    private void navigateToAdminDashboard(Utilisateur utilisateur) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/admin-dashboard.fxml"));
+            Parent dashboardRoot = loader.load();
+
+            // Get the controller and set the utilisateur
+            DashboardController controller = loader.getController();
+            controller.setUtilisateur(utilisateur);
+
+            // Get the current stage
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(dashboardRoot));
+            stage.setTitle("Admin Dashboard");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

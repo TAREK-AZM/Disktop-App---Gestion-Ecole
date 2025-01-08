@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.edoc.Controllers.etudiant.EtudiantModuleController"
+      spacing="10" alignment="CENTER"
+      style="-fx-background-color: linear-gradient(to bottom, #f7f9fc, #e3f2fd); -fx-border-color: #90caf9; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 20;">
+
+    <!-- Title -->
+    <Label text="Modules for Student"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+    <!-- ListView to display module names -->
+    <ListView fx:id="moduleListView"
+              prefWidth="300" prefHeight="200"
+              style="-fx-background-color: white; -fx-border-color: #90caf9; -fx-border-radius: 5;"/>
+
+    <!-- Close Button -->
+    <Button text="Close" onAction="#handleCloseButton"
+            prefWidth="100"
+            style="-fx-background-color: #ef5350; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-radius: 5; -fx-padding: 10;"/>
+</VBox>

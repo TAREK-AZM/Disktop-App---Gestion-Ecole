@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.professeur.ManageProfesseurController"
+      style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #ffffff, #e3f2fd); -fx-border-color: #90caf9; -fx-border-radius: 15; -fx-background-radius: 15;"
+      alignment="CENTER" prefWidth="400">
+    <!-- Title Section -->
+    <Label text="Update Professor" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <!-- Input Fields Section -->
+    <VBox spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #bbdefb;">
+        <TextField fx:id="idField" promptText="ID (Read-only)" editable="false"
+                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+        <TextField fx:id="nomField" promptText="Nom"
+                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+        <TextField fx:id="prenomField" promptText="Prenom"
+                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+        <TextField fx:id="specialiteField" promptText="Specialite"
+                   style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #90caf9; -fx-border-radius: 5;" />
+
+    </VBox>
+
+    <!-- Action Buttons Section -->
+    <HBox spacing="20" alignment="CENTER" style="-fx-padding: 10;">
+        <Button text="Save" onAction="#handleUpdateSave"
+                style="-fx-background-color: linear-gradient(to right, #66bb6a, #43a047); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
+        <Button text="Cancel" onAction="#handleCancel"
+                style="-fx-background-color: linear-gradient(to right, #ef5350, #e53935); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
+    </HBox>
+</VBox>

@@ -1,5 +1,10 @@
 package com.example.edoc.DAO;
 
+
+import com.example.edoc.Entities.Inscription;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Inscription;
 import com.example.edoc.Entities.Module;
@@ -21,14 +26,13 @@ public class InscriptionDAO implements CRUD <Inscription, Integer> {
         this.connection = DatabaseConnection.getInstance().getConnection();
     }
 
-
     @Override
     public boolean create(Inscription inscription) {
         String query = "INSERT INTO Inscriptions (etudiant_id, module_id, date_inscription) VALUES (?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, inscription.getEtudiantId());
             ps.setInt(2, inscription.getModuleId());
-            ps.setDate(3, Date.valueOf(inscription.getDateInscription()));  // Convertir LocalDate en java.sql.Date
+            ps.setDate(3, Date.valueOf(inscription.getDateInscription().toLocalDate()));  // Convertir LocalDate en java.sql.Date
 
             return ps.executeUpdate() > 0;  // Retourne vrai si une ligne a été insérée
         } catch (SQLException e) {
@@ -104,7 +108,6 @@ public class InscriptionDAO implements CRUD <Inscription, Integer> {
 
         return etudiants;
     }
-
 
 
     @Override

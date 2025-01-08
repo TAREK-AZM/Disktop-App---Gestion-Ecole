@@ -1,6 +1,7 @@
 package com.example.edoc.DAO;
 
 import com.example.edoc.Entities.Etudiant;
+import com.example.edoc.Entities.Module;
 import com.example.edoc.Utils.DatabaseConnection;
 import lombok.AllArgsConstructor;
 
@@ -22,15 +23,15 @@ public class EtudiantDAO implements CRUD <Etudiant, Integer> {
     @Override
     public boolean create(Etudiant etudiant) {
         try {
-            String query = "INSERT INTO Etudiants (id, matricule, nom, prenom, date_naissance, email, promo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Etudiants ( matricule, nom, prenom, date_naissance, email, promo) VALUES ( ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-                ps.setInt(1, etudiant.getId());
-                ps.setString(2, etudiant.getMatricule());
-                ps.setString(3, etudiant.getNom());
-                ps.setString(4, etudiant.getPrenom());
-                ps.setDate(5, new java.sql.Date(etudiant.getDateNaissance().getTime()));
-                ps.setString(6, etudiant.getEmail());
-                ps.setString(7, etudiant.getPromo());
+//                ps.setInt(1, etudiant.getId());
+                ps.setString(1, etudiant.getMatricule());
+                ps.setString(2, etudiant.getNom());
+                ps.setString(3, etudiant.getPrenom());
+                ps.setDate(4, new java.sql.Date(etudiant.getDateNaissance().getTime()));
+                ps.setString(5, etudiant.getEmail());
+                ps.setString(6, etudiant.getPromo());
                 return ps.executeUpdate() > 0;
             }
         } catch (SQLException e) {
@@ -123,6 +124,23 @@ public class EtudiantDAO implements CRUD <Etudiant, Integer> {
             System.err.println("Erreur lors de la récupération des étudiants : " + e.getMessage());
         }
         return etudiants;
+    }
+
+    public int findByUserName(String nom) {
+        String requete = "SELECT id FROM etudiants WHERE nom = ?";
+        try { // Replace with your connection method
+            PreparedStatement preparedStatement = connection.prepareStatement(requete) ;
+            preparedStatement.setString(1, nom);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Etudiant etudiant = new Etudiant() ;
+               etudiant.setId(resultSet.getInt("id"));
+                return resultSet.getInt("id") ;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1 ;
     }
 
 }
