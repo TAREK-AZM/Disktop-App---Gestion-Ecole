@@ -7,9 +7,11 @@ import com.example.edoc.Services.ProfesseurService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -127,9 +129,25 @@ public class DashboardController {
     @FXML
     public void handleSignOut() {
         setActiveButton(signOutBtn);
-        System.out.println("Signing out...");
-        // Implement sign-out logic
+        try {
+            // Load the login page FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/login.fxml"));
+            Parent loginRoot = loader.load();
+
+            // Get the current stage
+            Stage stage = (Stage) signOutBtn.getScene().getWindow();
+
+            // Set the login page as the current scene
+            stage.setScene(new Scene(loginRoot));
+            stage.setTitle("Login");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Failed to load login page.");
+        }
     }
+
 
     private void loadView(String fxmlFile) {
         try {
