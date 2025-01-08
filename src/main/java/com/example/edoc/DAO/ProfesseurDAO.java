@@ -14,10 +14,11 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
 
     @Override
     public boolean create(Professeur professeur) {
-        String requete = "insert into professeurs values( ? , ? , ?)" ;
+        String requete = "insert into professeurs(nom , prenom , specialite) values( ? , ? , ?)" ;
         try {
             preparedStatement = connection.prepareStatement(requete);
             // the id is autoincrement in the db
+
             preparedStatement.setString(1,professeur.getNom());
             preparedStatement.setString(2,professeur.getPrenom());
             preparedStatement.setString(3,professeur.getSpecialite());
@@ -26,9 +27,11 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
             // insert it then in the utilisateurs table
             String requete2 = "insert into utilisateurs values(?, ?, ?, ?)" ;
             // concatenate nom et prenom => username
+           Optional<Professeur> userProf =  this.findByUserName(professeur.getNom());
+            System.out.println(userProf);
             String userName = professeur.getNom() + "." + professeur.getPrenom();
             preparedStatement = connection.prepareStatement(requete2);
-            preparedStatement.setInt(1, professeur.getId());
+            preparedStatement.setInt(1, userProf.get().getId());
             preparedStatement.setString(2,userName);
             preparedStatement.setString(3,"1234");
             preparedStatement.setString(4,"professeur");

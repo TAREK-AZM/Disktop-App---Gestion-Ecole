@@ -3,6 +3,7 @@ module com.example.edoc {
     requires javafx.fxml;
     requires java.sql;
     requires static lombok;
+    requires org.apache.poi.ooxml;
 
 
     exports com.example.edoc;
