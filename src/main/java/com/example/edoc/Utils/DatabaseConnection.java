@@ -17,7 +17,6 @@ public class DatabaseConnection {
 
 
 
-
     private DatabaseConnection(){
         try{
             // charger le driver de la connection

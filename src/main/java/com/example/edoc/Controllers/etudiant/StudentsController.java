@@ -99,8 +99,6 @@ public class StudentsController {
     @FXML
     private ComboBox<String> moduleComboBox;
 
-    @FXML
-    private Button downloadCsvButton;
 
     @FXML
     private Button downloadExcelButton;
@@ -356,46 +354,6 @@ public class StudentsController {
         stage.showAndWait();
     }
 
-    @FXML
-    private void handleDownloadCsv() {
-        // Get the current items in the TableView (filtered or unfiltered)
-        ObservableList<Etudiant> students = studentsTable.getItems();
-
-        if (students.isEmpty()) {
-            showAlert("No Data", "There is no data to export.");
-            return;
-        }
-
-        // Create a FileChooser to let the user choose where to save the CSV file
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save CSV File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        File file = fileChooser.showSaveDialog(studentsTable.getScene().getWindow());
-
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
-                // Write the CSV header
-                writer.write("ID,Matricule,Nom,Prenom,Email,Promo,Date Naissance\n");
-
-                // Write each student's data to the CSV file
-                for (Etudiant student : students) {
-                    writer.write(
-                            student.getId() + "," +
-                                    student.getMatricule() + "," +
-                                    student.getNom() + "," +
-                                    student.getPrenom() + "," +
-                                    student.getEmail() + "," +
-                                    student.getPromo() + "," +
-                                    student.getDateNaissance() + "\n"
-                    );
-                }
-
-                showAlert("Success", "CSV file has been saved successfully.");
-            } catch (IOException e) {
-                showAlert("Error", "An error occurred while saving the CSV file: " + e.getMessage());
-            }
-        }
-    }
 
     @FXML
     private void handleDownloadExcel() {
