@@ -81,18 +81,20 @@ public class ManageEtudiantModulesController {
         String selectedModuleName = moduleDropdown.getSelectionModel().getSelectedItem();
 
         if (selectedEtudiantName != null && selectedModuleName != null) {
-        int idEtudiant = etudiantService.findByNom(selectedEtudiantName);
-        int idModule = moduleService.findByName(selectedModuleName);
-        Inscription inscription = new Inscription() ;
-        inscription.setEtudiantId(idEtudiant);
-        inscription.setModuleId(idModule);
-        inscription.setDateInscription(Date.valueOf(LocalDate.now()));
-        inscriptionService.create(inscription);
-            // Show a success message
-            showAlert("Success", "Module assigned successfully!", Alert.AlertType.INFORMATION);
-        } else {
-            // Show an error message
-            showAlert("Error", "Failed to assign module. Please select both a student and a module.", Alert.AlertType.ERROR);
+            int idEtudiant = etudiantService.findByNom(selectedEtudiantName);
+            int idModule = moduleService.findByName(selectedModuleName);
+            Inscription inscription = new Inscription();
+            inscription.setEtudiantId(idEtudiant);
+            inscription.setModuleId(idModule);
+            inscription.setDateInscription(Date.valueOf(LocalDate.now()));
+
+            if (inscriptionService.create(inscription)) {
+
+                showAlert("Success", "Module assigned successfully!", Alert.AlertType.INFORMATION);
+            } else {
+                // Show an error message
+                showAlert("Error", "this student already have this module!.", Alert.AlertType.ERROR);
+            }
         }
     }
 

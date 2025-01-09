@@ -74,6 +74,32 @@ public class InscriptionDAO implements CRUD <Inscription, Integer> {
 
         return etudiants;
     }
+    public Optional<Inscription> checkInscription(int idEtudiant, int idModule) {
+        String query = "SELECT * FROM Inscriptions WHERE module_id = ? AND etudiant_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, idModule);
+            ps.setInt(2, idEtudiant);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Inscription inscription = new Inscription();
+                    inscription.setId(rs.getInt("id"));
+                    inscription.setEtudiantId(rs.getInt("etudiant_id"));
+                    inscription.setModuleId(rs.getInt("module_id"));
+                    inscription.setDateInscription(rs.getDate("date_inscription"));
+                    return Optional.of(inscription);
+                }
+            }
+        } catch (SQLException e) {
+            // Log the exception instead of printing it
+            System.err.println("Error checking inscriptions: " + e.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+
 
     @Override
     public boolean create(Inscription inscription) {
