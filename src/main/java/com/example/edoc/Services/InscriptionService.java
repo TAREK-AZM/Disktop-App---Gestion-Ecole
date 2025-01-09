@@ -49,6 +49,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -61,6 +62,11 @@ public class InscriptionService {
     public boolean create(Inscription inscription) {
         String requete = "insert into inscriptions (etudiant_id , module_id, date_inscription ) values( ? , ? ,?)";
         try {
+            // check si un etudiant est deja inscrit pour le meme module
+            if(this.checkInscription(inscription.getEtudiantId() , inscription.getModuleId()).isPresent()){
+                System.out.println("inscription already exist");
+                return false;
+            }
             preparedStatement = connection.prepareStatement(requete);
             // the id is autoincrement in the db
 
@@ -70,6 +76,7 @@ public class InscriptionService {
             preparedStatement.executeUpdate();
             System.out.println("etudiant inscription created");
             return true;
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -94,6 +101,9 @@ public class InscriptionService {
 
     public List<Etudiant> getEtudiantsByModule(Module module){
         return this.inscriptionDAO.getEtudiantsByModule(module);
+    }
+    public Optional<Inscription> checkInscription(int etudiantId , int moduleId){
+        return this.inscriptionDAO.checkInscription(etudiantId, moduleId);
     }
 
 
