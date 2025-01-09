@@ -48,12 +48,13 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
 
     @Override
     public boolean update(Professeur professeur) {
-        String requete = "update professeurs set nom=? , prenom=? where id=?";
+        String requete = "update professeurs set nom=? , prenom=?, specialite=? where id=?";
         try {
             preparedStatement = connection.prepareStatement(requete);
-            preparedStatement.setInt(3, professeur.getId());
+            preparedStatement.setInt(4, professeur.getId());
             preparedStatement.setString(1, professeur.getNom());
             preparedStatement.setString(2, professeur.getPrenom());
+            preparedStatement.setString(3, professeur.getSpecialite());
             preparedStatement.executeUpdate();
             System.out.println("professeur modifie avec succes ");
             String requete2="update utilisateurs set username=? where id=?" ;

@@ -1,7 +1,6 @@
 // ProfesseurController.java
 package com.example.edoc.Controllers.professeur;
 
-import com.example.edoc.Controllers.etudiant.ConfirmDeletionController;
 import com.example.edoc.Controllers.module.ManageModuleController;
 import com.example.edoc.Controllers.module.ModulesController;
 import com.example.edoc.Entities.Professeur;
@@ -178,7 +177,7 @@ public class ProfesseurController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/professeur/ConfirmDelete.fxml"));
                 Parent confirmView = loader.load();
 
-                ConfirmDeleteController controller = loader.getController();
+                ConfirmDeletionController controller = loader.getController();
                 controller.setProfesseur(selectedProf);
 
                 Stage stage = new Stage(StageStyle.UNDECORATED);
