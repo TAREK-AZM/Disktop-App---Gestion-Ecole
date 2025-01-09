@@ -4,6 +4,8 @@ import com.example.edoc.Entities.Module;
 import com.example.edoc.Entities.Professeur;
 import com.example.edoc.Services.ModuleService;
 import com.example.edoc.Services.ProfesseurService;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -59,12 +61,18 @@ public class ModulesController {
 
     private ObservableList<Module> allModules = FXCollections.observableArrayList();
 
+    private IntegerProperty ProfId = new SimpleIntegerProperty(0);
+
     @FXML
     public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomModuleColumn.setCellValueFactory(new PropertyValueFactory<>("nomModule"));
         codeModuleColumn.setCellValueFactory(new PropertyValueFactory<>("codeModule"));
         professeurIdColumn.setCellValueFactory(new PropertyValueFactory<>("professeurId"));
+
+        ProfId.addListener((obs, oldVal, newVal) -> {
+            loadModules();
+        });
 
         loadModules();
 
@@ -79,7 +87,16 @@ public class ModulesController {
     }
 
     private void loadModules() {
-        List<Module> modules = moduleService.GetAllModules();
+        List<Module> modules;
+        ProfesseurService professeurService = new ProfesseurService();
+        Professeur professeur = new Professeur();
+        if(ProfId.get() == 0) {
+            modules = moduleService.GetAllModules();
+        }
+        else{
+            professeur = professeurService.getProfesseurById(ProfId.get()).get();
+            modules = moduleService.GetAllModulesOfProfesseur(professeur);
+        }
         allModules = FXCollections.observableArrayList(modules);
         modulesTable.setItems(allModules);
     }
@@ -180,5 +197,9 @@ public class ModulesController {
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         cancelButton.setDisable(true);
+    }
+
+    public void setProfId(int id) {
+        this.ProfId.set(id);
     }
 }

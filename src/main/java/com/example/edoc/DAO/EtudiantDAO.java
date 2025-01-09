@@ -143,4 +143,33 @@ public class EtudiantDAO implements CRUD <Etudiant, Integer> {
         return -1 ;
     }
 
+    public List<Etudiant> getEtudiantsByProfesseur(int professeurId) {
+        ModuleDAO moduleDAO = new ModuleDAO();
+        List<Etudiant> etudiants = new ArrayList<>();
+        String queryModules = "SELECT ID FROM modules WHERE professeur_id = ?";
+
+        try (PreparedStatement moduleStatement = connection.prepareStatement(queryModules)) {
+            moduleStatement.setInt(1, professeurId);
+            ResultSet rsModules = moduleStatement.executeQuery();
+
+            List<Integer> moduleIds = new ArrayList<>();
+            while (rsModules.next()) {
+                moduleIds.add(rsModules.getInt("ID"));
+            }
+
+            if (!moduleIds.isEmpty()) {
+                // Utilisation d'InscriptionDAO pour récupérer les étudiants
+                InscriptionDAO inscriptionDAO = new InscriptionDAO();
+                for (int moduleId : moduleIds) {
+                    etudiants.addAll(inscriptionDAO.getEtudiantsByModule(moduleDAO.findById(moduleId).get()));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des modules du professeur : " + e.getMessage());
+        }
+
+        return etudiants;
+    }
+
+
 }

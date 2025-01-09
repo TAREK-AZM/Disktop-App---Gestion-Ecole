@@ -38,4 +38,12 @@ public class ProfesseurService {
     public Optional<Professeur> getProfesseurById(int id) {
         return professeurDAO.findById(id);
     }
+
+    public Professeur getProfesseurByNomPrenom(String username) {
+        // Implémentez une logique pour trouver le professeur via le username
+        String[] parts = username.split("\\.");
+        String nom = parts[0];
+        String prenom = parts[1];
+        return professeurDAO.findByNomAndPrenom(nom, prenom);
+    }
 }

@@ -1,5 +1,10 @@
 package com.example.edoc;
 
+import com.example.edoc.DAO.EtudiantDAO;
+import com.example.edoc.Entities.Professeur;
+import com.example.edoc.Services.EtudiantService;
+import com.example.edoc.Services.ModuleService;
+import com.example.edoc.Services.ProfesseurService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,6 +25,17 @@ public class HelloApplication extends Application {
 
     public static void main(String[] args)  {
        launch(args);
+        //EtudiantDAO etudiantDAO = new EtudiantDAO();
+        //System.out.println(etudiantDAO.getEtudiantsByProfesseur(1));
+
+        //EtudiantService etudiantService = new EtudiantService();
+        //System.out.println(etudiantService.getEtudiantsByProf(1));
+
+        /*ModuleService moduleService = new ModuleService();
+        ProfesseurService professeurService = new ProfesseurService();
+        Professeur professeur = new Professeur();
+        professeur = professeurService.getProfesseurById(8).get();
+        System.out.println(moduleService.GetAllModulesOfProfesseur(professeur));*/
 
     }
 }

@@ -1,5 +1,7 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.Controllers.etudiant.StudentsController;
+import com.example.edoc.Controllers.module.ModulesController;
 import com.example.edoc.DAO.EtudiantDAO;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.EtudiantService;
@@ -131,7 +133,20 @@ public class ProfDashboardController {
 
 private void loadView(String fxmlFile) {
     try {
-        Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+        // Charge la vue à partir du fichier FXML spécifié
+        //Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/" + fxmlFile));
+        Parent view = loader.load();
+        // Obtenez le contrôleur de la vue
+        if(fxmlFile.contains("Students")) {
+            StudentsController controller = loader.getController();
+            controller.setProfId(utilisateur.getId());
+        }
+        else{
+            ModulesController controller = loader.getController();
+            controller.setProfId(utilisateur.getId());
+        }
+        // Remplace le contenu de 'contentArea' avec la nouvelle vue chargée
         contentArea.getChildren().setAll(view);
     } catch (IOException e) {
         e.printStackTrace();

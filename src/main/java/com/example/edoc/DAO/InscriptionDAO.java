@@ -110,6 +110,7 @@ public class InscriptionDAO implements CRUD <Inscription, Integer> {
     }
 
 
+
     @Override
     public Optional<Inscription> findById(Integer integer) {
         return Optional.empty();

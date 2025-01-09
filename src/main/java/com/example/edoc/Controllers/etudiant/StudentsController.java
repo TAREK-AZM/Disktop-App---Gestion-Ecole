@@ -2,9 +2,13 @@ package com.example.edoc.Controllers.etudiant;
 
 import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Module;
+import com.example.edoc.Entities.Professeur;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.InscriptionService;
 import com.example.edoc.Services.ModuleService;
+import com.example.edoc.Services.ProfesseurService;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,9 +24,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /// import files manager tools
 import javafx.stage.FileChooser;
@@ -30,6 +32,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 ///// xlx execl file
+import lombok.Data;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -37,6 +40,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
 
 public class StudentsController {
 
@@ -104,6 +108,7 @@ public class StudentsController {
     private final EtudiantService etudiantService = new EtudiantService();
     private final ModuleService moduleService = new ModuleService();
     private final InscriptionService inscriptionService = new InscriptionService();
+    private IntegerProperty ProfId = new SimpleIntegerProperty(0);
 
     private ObservableList<Etudiant> allStudents = FXCollections.observableArrayList();
 
@@ -118,9 +123,15 @@ public class StudentsController {
         promoColumn.setCellValueFactory(new PropertyValueFactory<>("promo"));
         dateNaissanceColumn.setCellValueFactory(new PropertyValueFactory<>("dateNaissance"));
 
+        ProfId.addListener((obs, oldVal, newVal) -> {
+            loadModules1();
+        });
         // Load modules into the ComboBox
         loadModules1();
 
+        ProfId.addListener((obs, oldVal, newVal) -> {
+            loadStudents();
+        });
         // Load all students initially
         loadStudents();
 
@@ -145,8 +156,14 @@ public class StudentsController {
     }
 
     private void loadStudents() {
-        List<Etudiant> students = etudiantService.getAll();
-        allStudents = FXCollections.observableArrayList(students);
+        List<Etudiant> students;
+        if(ProfId.get() == 0) {
+            students = etudiantService.getAll();}
+        else {
+            students = etudiantService.getEtudiantsByProf(ProfId.get());
+        }
+        Set<Etudiant> uniqueStudents = new HashSet<>(students);
+        allStudents = FXCollections.observableArrayList(uniqueStudents);
         studentsTable.setItems(allStudents);
     }
 
@@ -271,7 +288,15 @@ public class StudentsController {
 
     private void loadModules1() {
         // Fetch all modules from the service
-        List<Module> modules = moduleService.GetAllModules();
+        ProfesseurService professeurService = new ProfesseurService();
+        Professeur professeur = new Professeur();
+        List<Module> modules;
+        if(ProfId.get() == 0)
+            modules = moduleService.GetAllModules();
+        else{
+            professeur = professeurService.getProfesseurById(ProfId.get()).get();
+            modules = moduleService.GetAllModulesOfProfesseur(professeur);
+        }
 
         // Create a list to store module names
         List<String> moduleNames = new ArrayList<>();
@@ -462,5 +487,13 @@ public class StudentsController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void setProfId(int id) {
+        this.ProfId.set(id);
+    }
+
+    public int getProfId() {
+        return this.ProfId.get();
     }
 }

@@ -158,4 +158,29 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
         }
         return Optional.empty();
     }
+
+    public Professeur findByNomAndPrenom(String nom, String prenom) {
+        String sql = "SELECT * FROM professeurs WHERE nom = ? AND prenom = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nom);
+            statement.setString(2, prenom);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Professeur professeur = new Professeur();
+                professeur.setId(resultSet.getInt("id"));
+                professeur.setNom(resultSet.getString("nom"));
+                professeur.setPrenom(resultSet.getString("prenom"));
+                professeur.setSpecialite(resultSet.getString("specialite"));
+
+                return professeur;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Retourne null si le professeur n'existe pas
+    }
 }
