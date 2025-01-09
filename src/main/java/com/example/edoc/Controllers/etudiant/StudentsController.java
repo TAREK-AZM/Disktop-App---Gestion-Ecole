@@ -24,23 +24,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/// import files manager tools
+/// Import files manager tools
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-///// xlx execl file
+///// Excel file
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import javafx.stage.FileChooser;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class StudentsController {
 
-    public Button downloadCsvButton;
     @FXML
     private TableView<Etudiant> studentsTable;
 
@@ -101,6 +96,12 @@ public class StudentsController {
     @FXML
     private ComboBox<String> moduleComboBox;
 
+    @FXML
+    private Button downloadCsvButton;
+
+    @FXML
+    private Button downloadExcelButton;
+
     private final EtudiantService etudiantService = new EtudiantService();
     private final ModuleService moduleService = new ModuleService();
     private final InscriptionService inscriptionService = new InscriptionService();
@@ -137,7 +138,10 @@ public class StudentsController {
 
         // Add listener to the ComboBox to fetch students by module
         moduleComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
+            if ("All modules".equals(newSelection)) {
+                // Reset the table to show all students
+                studentsTable.setItems(allStudents);
+            } else if (newSelection != null) {
                 // Fetch students enrolled in the selected module
                 fetchStudentsByModule(newSelection);
             }
@@ -276,6 +280,9 @@ public class StudentsController {
         // Create a list to store module names
         List<String> moduleNames = new ArrayList<>();
 
+        // Add "Tous les modules" as the first option
+        moduleNames.add("All modules");
+
         // Extract module names using a loop
         for (Module module : modules) {
             moduleNames.add(module.getNomModule());
@@ -286,22 +293,30 @@ public class StudentsController {
 
         // Set the items in the ComboBox
         moduleComboBox.setItems(observableModuleNames);
+
+        // Set the default selected item to "Tous les modules"
+        moduleComboBox.getSelectionModel().selectFirst();
     }
 
     private void fetchStudentsByModule(String moduleName) {
-        // Fetch the module ID by name
-        int moduleId = moduleService.findByName(moduleName);
-        if (moduleId !=0) {
-            Optional<Module> module = moduleService.GetModuleById(moduleId);
-
-            // Fetch students enrolled in the module using InscriptionService
-            List<Etudiant> students = inscriptionService.getEtudiantsByModule(module.get());
-
-            // Update the TableView with the fetched students
-            ObservableList<Etudiant> studentList = FXCollections.observableArrayList(students);
-            studentsTable.setItems(studentList);
+        if ("All modules".equals(moduleName)) {
+            // Show all students
+            studentsTable.setItems(allStudents);
         } else {
-            System.out.println("Module not found: " + moduleName);
+            // Fetch the module ID by name
+            int moduleId = moduleService.findByName(moduleName);
+            if (moduleId != 0) {
+                Optional<Module> module = moduleService.GetModuleById(moduleId);
+
+                // Fetch students enrolled in the module using InscriptionService
+                List<Etudiant> students = inscriptionService.getEtudiantsByModule(module.get());
+
+                // Update the TableView with the fetched students
+                ObservableList<Etudiant> studentList = FXCollections.observableArrayList(students);
+                studentsTable.setItems(studentList);
+            } else {
+                System.out.println("Module not found: " + moduleName);
+            }
         }
     }
 
@@ -316,7 +331,6 @@ public class StudentsController {
         stage.setScene(new Scene(manageModuleView));
         stage.showAndWait();
     }
-
 
     @FXML
     private void handleDownloadCsv() {
@@ -417,6 +431,7 @@ public class StudentsController {
             }
         }
     }
+
     @FXML
     public void showModules(ActionEvent actionEvent) throws IOException {
         // Get the selected student
@@ -453,8 +468,6 @@ public class StudentsController {
         stage.setScene(new Scene(manageModuleView));
         stage.showAndWait();
     }
-
-
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
