@@ -1,6 +1,7 @@
 package com.example.edoc.DAO;
 
 import com.example.edoc.Entities.Etudiant;
+import com.example.edoc.Entities.Module;
 import com.example.edoc.Utils.DatabaseConnection;
 import lombok.AllArgsConstructor;
 
@@ -123,6 +124,23 @@ public class EtudiantDAO implements CRUD <Etudiant, Integer> {
             System.err.println("Erreur lors de la récupération des étudiants : " + e.getMessage());
         }
         return etudiants;
+    }
+
+    public int findByUserName(String nom) {
+        String requete = "SELECT id FROM etudiants WHERE nom = ?";
+        try { // Replace with your connection method
+            PreparedStatement preparedStatement = connection.prepareStatement(requete) ;
+            preparedStatement.setString(1, nom);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Etudiant etudiant = new Etudiant() ;
+               etudiant.setId(resultSet.getInt("id"));
+                return resultSet.getInt("id") ;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1 ;
     }
 
 }

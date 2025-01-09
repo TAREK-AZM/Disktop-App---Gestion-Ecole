@@ -1,0 +1,26 @@
+.dashboard-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+.dashboard-button:hover {
+    -fx-text-fill: #1aa179;
+    -fx-background-color: rgba(26, 161, 121, 0.1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.button.dashboard-button {
+    -fx-text-fill: #20c997;
+}
+
+.button.dashboard-button:hover {
+    -fx-text-fill: #1aa179;
+    -fx-background-color: rgba(32, 201, 151, 0.1);
+}

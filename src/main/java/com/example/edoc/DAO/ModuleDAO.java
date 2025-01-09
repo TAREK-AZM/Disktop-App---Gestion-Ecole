@@ -1,5 +1,6 @@
 package com.example.edoc.DAO;
 
+import com.example.edoc.Entities.Professeur;
 import com.example.edoc.Utils.DatabaseConnection;
 import com.example.edoc.Entities.Module;
 
@@ -132,6 +133,23 @@ public class ModuleDAO implements CRUD<Module, Integer> {
         }
 
         return modules;
+    }
+
+    public int findByUserName(String nomModule) {
+        String requete = "SELECT id FROM modules WHERE nom_module = ?";
+        try { // Replace with your connection method
+            PreparedStatement preparedStatement = myConnection.prepareStatement(requete) ;
+            preparedStatement.setString(1, nomModule);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Module module = new Module() ;
+                module.setId(resultSet.getInt("id"));
+                return resultSet.getInt("id") ;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1 ;
     }
 
 

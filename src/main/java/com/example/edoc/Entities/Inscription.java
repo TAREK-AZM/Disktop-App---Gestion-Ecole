@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +14,12 @@ public class Inscription {
     private int id;
     private int etudiantId;
     private int moduleId;
-    private LocalDate dateInscription;
+    private Date dateInscription;
+
+    public Inscription( int id ,int etudiantId, int moduleId) {
+        this.id = id;
+        this.etudiantId = etudiantId;
+        this.moduleId = moduleId;
+        this.dateInscription = Date.valueOf(LocalDate.now());
+    }
 }
