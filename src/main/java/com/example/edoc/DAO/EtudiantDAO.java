@@ -4,9 +4,13 @@ import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Module;
 import com.example.edoc.Utils.DatabaseConnection;
 import lombok.AllArgsConstructor;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +25,47 @@ public class EtudiantDAO implements CRUD <Etudiant, Integer> {
     }
 
     @Override
+
+
+
+
     public boolean create(Etudiant etudiant) {
         try {
-            String query = "INSERT INTO Etudiants ( matricule, nom, prenom, date_naissance, email, promo) VALUES ( ?, ?, ?, ?, ?, ?)";
+            // Get the current year
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+            // Get the year of birth from the date of birth
+            Calendar birthCalendar = Calendar.getInstance();
+            birthCalendar.setTime(etudiant.getDateNaissance());
+            int birthYear = birthCalendar.get(Calendar.YEAR);
+
+            // Check if the student is at least 17 years old
+            if (currentYear - birthYear < 17) {
+                System.err.println("Erreur : L'étudiant doit avoir au moins 17 ans.");
+                return false;
+            }
+
+            System.out.println("current year : " + currentYear);
+            System.out.println("birth year : " + birthYear);
+
+            // Parse the promo year from the string
+            int promoYear;
+            try {
+                promoYear = Integer.parseInt(etudiant.getPromo());
+            } catch (NumberFormatException e) {
+                System.err.println("Erreur : La promo n'est pas un nombre valide.");
+                return false;
+            }
+
+            // Check if the promo year is not greater than the current year
+            if (promoYear > currentYear) {
+                System.err.println("Erreur : La promo n'est pas valide.");
+                return false;
+            }
+
+            String query = "INSERT INTO Etudiants (matricule, nom, prenom, date_naissance, email, promo) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = connection.prepareStatement(query)) {
-//                ps.setInt(1, etudiant.getId());
+                // Fill in the prepared statement parameters
                 ps.setString(1, etudiant.getMatricule());
                 ps.setString(2, etudiant.getNom());
                 ps.setString(3, etudiant.getPrenom());

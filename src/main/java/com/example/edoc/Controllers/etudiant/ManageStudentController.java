@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.util.Calendar;
+
 public class ManageStudentController {
 
     @FXML
@@ -87,6 +89,36 @@ public class ManageStudentController {
                 showErrorMessage("Please fill all required fields!");
                 return;
             }
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+            // jib la date de naissance
+            java.sql.Date dateNaissance = java.sql.Date.valueOf(dateNaissancePicker.getValue());
+
+            // Get the year of birth from the date of birth
+            Calendar birthCalendar = Calendar.getInstance();
+            birthCalendar.setTime(dateNaissance);
+            int birthYear = birthCalendar.get(Calendar.YEAR);
+
+            // Check if the student is at least 17 years old
+            if (currentYear - birthYear < 17) {
+                showErrorMessage("The student must be at least 17 years old.");
+                return;
+            }
+
+            // Parse the promo year from the text field
+            int promoYear;
+            try {
+                promoYear = Integer.parseInt(promoField.getText());
+            } catch (NumberFormatException e) {
+                showErrorMessage("The promo year is not a valid number.");
+                return;
+            }
+
+            // Check if the promo year is not greater than the current year
+            if (promoYear > currentYear || promoYear <currentYear-7) {
+                showErrorMessage("The promo year is not valid");
+                return;
+            }
 
             // Create a new student object
             Etudiant newStudent = new Etudiant();
@@ -95,7 +127,7 @@ public class ManageStudentController {
             newStudent.setPrenom(prenomField.getText());
             newStudent.setEmail(emailField.getText());
             newStudent.setPromo(promoField.getText());
-            newStudent.setDateNaissance(java.sql.Date.valueOf(dateNaissancePicker.getValue()));
+            newStudent.setDateNaissance(dateNaissance);
 
             // Save the student to the database
             boolean saved = etudiantService.create(newStudent);
