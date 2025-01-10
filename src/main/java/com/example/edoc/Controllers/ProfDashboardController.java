@@ -1,5 +1,7 @@
 package com.example.edoc.Controllers;
 
+import com.example.edoc.Controllers.etudiant.StudentsController;
+import com.example.edoc.Controllers.module.ModulesController;
 import com.example.edoc.DAO.EtudiantDAO;
 import com.example.edoc.Entities.Utilisateur;
 import com.example.edoc.Services.EtudiantService;
@@ -44,56 +46,24 @@ public class ProfDashboardController {
     public Button signOutBtn;
 
 
-    ///
-    @FXML
-    private Label usernameLabel;
-    @FXML
-    private Label roleLabel;
 
-    private Utilisateur utilisateur;
 
     ///////
     @FXML
     private StackPane contentArea;
-
-    @FXML
-    private Label totalStudentsLabel;
-
-    @FXML
-    private Label totalProfessorsLabel;
-
-    @FXML
-    private Label totalModulesLabel;
 
 //    @FXML
 //    private Label mostFollowedModuleLabel;
 
     private Button activeButton;
     private final List<Button> navigationButtons = new ArrayList<>();
+    private Utilisateur utilisateur;
 
-    private void loadStatistics() {
-        // Fetch and display the total number of students
-        EtudiantService studentService = new EtudiantService();
-        ProfesseurService professorService = new ProfesseurService();
-        ModuleService moduleService = new ModuleService();
-        int totalStudents = studentService.getAll().size();
-        totalStudentsLabel.setText(String.valueOf(totalStudents));
-
-        // Fetch and display the total number of professors
-        int totalProfessors = professorService.getAllProfesseur().size();
-        totalProfessorsLabel.setText(String.valueOf(totalProfessors));
-
-        // Fetch and display the total number of modules
-        int totalModules = moduleService.GetAllModules().size();
-        totalModulesLabel.setText(String.valueOf(totalModules));
-
-
-    }
 
     @FXML
     public void initialize() {
 
-        loadStatistics();
+
 
         // Add all navigation buttons to the list
         navigationButtons.add(dashboardBtn);
@@ -107,16 +77,9 @@ public class ProfDashboardController {
     }
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
-        updateUI();
     }
 
-    private void updateUI() {
-        // Update the UI with the utilisateur data
-        if (utilisateur != null) {
-            usernameLabel.setText(utilisateur.getUsername());
-            roleLabel.setText(utilisateur.getRole());
-        }
-    }
+
 
     @FXML
     public void showStudentsforProfessores() {
@@ -131,7 +94,20 @@ public class ProfDashboardController {
 
 private void loadView(String fxmlFile) {
     try {
-        Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+        // Charge la vue à partir du fichier FXML spécifié
+        //Parent view = FXMLLoader.load(getClass().getResource("/com/example/edoc/" + fxmlFile));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edoc/" + fxmlFile));
+        Parent view = loader.load();
+        // Obtenez le contrôleur de la vue
+        if(fxmlFile.contains("Students")) {
+            StudentsController controller = loader.getController();
+            controller.setProfId(utilisateur.getId());
+        }
+        else{
+            ModulesController controller = loader.getController();
+            controller.setProfId(utilisateur.getId());
+        }
+        // Remplace le contenu de 'contentArea' avec la nouvelle vue chargée
         contentArea.getChildren().setAll(view);
     } catch (IOException e) {
         e.printStackTrace();

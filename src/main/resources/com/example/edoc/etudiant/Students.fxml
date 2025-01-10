@@ -46,6 +46,10 @@
             <TableColumn text="Promo" fx:id="promoColumn" prefWidth="100" />
             <TableColumn text="Date Naissance" fx:id="dateNaissanceColumn" prefWidth="150" />
         </columns>
+
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
     </TableView>
 
     <!-- Action Buttons Section -->
@@ -63,10 +67,7 @@
         <Button fx:id="cancelButton" text="Cancel" disable="true" onAction="#handleCancel"
                 style="-fx-background-color: linear-gradient(to right, #bdbdbd, #9e9e9e); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
 
-        <!-- Add the Download CSV Button -->
-        <Button fx:id="downloadCsvButton" text="Download CSV" onAction="#handleDownloadCsv"
-                style="-fx-background-color: linear-gradient(to right, #ff9800, #f57c00); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
-        <!-- Add the Download Excel Button -->
+       <!-- Add the Download Excel Button -->
         <Button fx:id="downloadExcelButton" text="Download Excel" onAction="#handleDownloadExcel"
                 style="-fx-background-color: linear-gradient(to right, #4CAF50, #388E3C); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
     </HBox>

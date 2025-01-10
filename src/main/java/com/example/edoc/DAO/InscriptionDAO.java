@@ -1,5 +1,6 @@
 package com.example.edoc.DAO;
 
+
 import com.example.edoc.Entities.Inscription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,39 @@ public class InscriptionDAO implements CRUD <Inscription, Integer> {
     // Constructeur qui prend une connexion comme paramètre
     public InscriptionDAO() {
         this.connection = DatabaseConnection.getInstance().getConnection();
+    }
+
+    @Override
+    public boolean create(Inscription inscription) {
+        String query = "INSERT INTO Inscriptions (etudiant_id, module_id, date_inscription) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, inscription.getEtudiantId());
+            ps.setInt(2, inscription.getModuleId());
+            ps.setDate(3, Date.valueOf(inscription.getDateInscription().toLocalDate()));  // Convertir LocalDate en java.sql.Date
+
+            return ps.executeUpdate() > 0;  // Retourne vrai si une ligne a été insérée
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'insertion de l'inscription : " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(Inscription inscription) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(Integer id) {
+        String query = "DELETE FROM Inscriptions WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, id);
+
+            return ps.executeUpdate() > 0;  // Retourne vrai si une ligne a été supprimée
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la suppression de l'inscription : " + e.getMessage());
+            return false;
+        }
     }
 
     // Méthode pour récupérer les inscriptions par module
@@ -101,20 +135,7 @@ public class InscriptionDAO implements CRUD <Inscription, Integer> {
 
 
 
-    @Override
-    public boolean create(Inscription inscription) {
-        return false;
-    }
 
-    @Override
-    public boolean update(Inscription inscription) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Integer integer) {
-        return false;
-    }
 
     @Override
     public Optional<Inscription> findById(Integer integer) {

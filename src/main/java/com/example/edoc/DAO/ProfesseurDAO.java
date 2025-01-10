@@ -48,12 +48,13 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
 
     @Override
     public boolean update(Professeur professeur) {
-        String requete = "update professeurs set nom=? , prenom=? where id=?";
+        String requete = "update professeurs set nom=? , prenom=?, specialite=? where id=?";
         try {
             preparedStatement = connection.prepareStatement(requete);
-            preparedStatement.setInt(3, professeur.getId());
+            preparedStatement.setInt(4, professeur.getId());
             preparedStatement.setString(1, professeur.getNom());
             preparedStatement.setString(2, professeur.getPrenom());
+            preparedStatement.setString(3, professeur.getSpecialite());
             preparedStatement.executeUpdate();
             System.out.println("professeur modifie avec succes ");
             String requete2="update utilisateurs set username=? where id=?" ;
@@ -157,5 +158,30 @@ public class ProfesseurDAO implements CRUD<Professeur , Integer>{
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public Professeur findByNomAndPrenom(String nom, String prenom) {
+        String sql = "SELECT * FROM professeurs WHERE nom = ? AND prenom = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nom);
+            statement.setString(2, prenom);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Professeur professeur = new Professeur();
+                professeur.setId(resultSet.getInt("id"));
+                professeur.setNom(resultSet.getString("nom"));
+                professeur.setPrenom(resultSet.getString("prenom"));
+                professeur.setSpecialite(resultSet.getString("specialite"));
+
+                return professeur;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Retourne null si le professeur n'existe pas
     }
 }

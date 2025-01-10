@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.sql.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Inscription {
     private int id;
@@ -21,5 +20,6 @@ public class Inscription {
         this.etudiantId = etudiantId;
         this.moduleId = moduleId;
         this.dateInscription = Date.valueOf(LocalDate.now());
+
     }
 }

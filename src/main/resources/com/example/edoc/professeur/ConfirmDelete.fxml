@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.edoc.Controllers.professeur.ConfirmDeletionController"
+      style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #ffffff, #e3f2fd); -fx-border-color: #b9edf8; -fx-border-radius: 15; -fx-background-radius: 15;"
+      alignment="CENTER"
+      prefWidth="400"
+>
+    <!-- Title Section -->
+    <Label text="Confirm Deletion" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+
+    <!-- Message Section -->
+    <Label fx:id="deletionMessage" text="Are you sure you want to delete this item?" wrapText="true"
+           style="-fx-font-size: 16px; -fx-text-fill: #d84315; -fx-padding: 10;" alignment="CENTER" />
+
+    <!-- Action Buttons Section -->
+    <HBox spacing="20" alignment="CENTER" style="-fx-padding: 10;">
+        <Button text="Yes, Delete" onAction="#confirmDeletion"
+                style="-fx-background-color: linear-gradient(to right, #e53935, #d32f2f); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
+        <Button text="Cancel" onAction="#cancelDeletion"
+                style="-fx-background-color: linear-gradient(to right, #9e9e9e, #757575); -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;" />
+    </HBox>
+</VBox>

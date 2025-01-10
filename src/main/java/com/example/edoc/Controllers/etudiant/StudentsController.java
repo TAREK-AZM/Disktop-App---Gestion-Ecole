@@ -2,9 +2,13 @@ package com.example.edoc.Controllers.etudiant;
 
 import com.example.edoc.Entities.Etudiant;
 import com.example.edoc.Entities.Module;
+import com.example.edoc.Entities.Professeur;
 import com.example.edoc.Services.EtudiantService;
 import com.example.edoc.Services.InscriptionService;
 import com.example.edoc.Services.ModuleService;
+import com.example.edoc.Services.ProfesseurService;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,19 +24,18 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /// Import files manager tools
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileWriter;
-///// Excel file
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
+
 
 public class StudentsController {
 
@@ -96,8 +99,6 @@ public class StudentsController {
     @FXML
     private ComboBox<String> moduleComboBox;
 
-    @FXML
-    private Button downloadCsvButton;
 
     @FXML
     private Button downloadExcelButton;
@@ -105,6 +106,7 @@ public class StudentsController {
     private final EtudiantService etudiantService = new EtudiantService();
     private final ModuleService moduleService = new ModuleService();
     private final InscriptionService inscriptionService = new InscriptionService();
+    private IntegerProperty ProfId = new SimpleIntegerProperty(0);
 
     private ObservableList<Etudiant> allStudents = FXCollections.observableArrayList();
 
@@ -119,9 +121,15 @@ public class StudentsController {
         promoColumn.setCellValueFactory(new PropertyValueFactory<>("promo"));
         dateNaissanceColumn.setCellValueFactory(new PropertyValueFactory<>("dateNaissance"));
 
+        ProfId.addListener((obs, oldVal, newVal) -> {
+            loadModules1();
+        });
         // Load modules into the ComboBox
         loadModules1();
 
+        ProfId.addListener((obs, oldVal, newVal) -> {
+            loadStudents();
+        });
         // Load all students initially
         loadStudents();
 
@@ -149,8 +157,14 @@ public class StudentsController {
     }
 
     private void loadStudents() {
-        List<Etudiant> students = etudiantService.getAll();
-        allStudents = FXCollections.observableArrayList(students);
+        List<Etudiant> students;
+        if(ProfId.get() == 0) {
+            students = etudiantService.getAll();}
+        else {
+            students = etudiantService.getEtudiantsByProf(ProfId.get());
+        }
+        Set<Etudiant> uniqueStudents = new HashSet<>(students);
+        allStudents = FXCollections.observableArrayList(uniqueStudents);
         studentsTable.setItems(allStudents);
     }
 
@@ -275,7 +289,15 @@ public class StudentsController {
 
     private void loadModules1() {
         // Fetch all modules from the service
-        List<Module> modules = moduleService.GetAllModules();
+        ProfesseurService professeurService = new ProfesseurService();
+        Professeur professeur = new Professeur();
+        List<Module> modules;
+        if(ProfId.get() == 0)
+            modules = moduleService.GetAllModules();
+        else{
+            professeur = professeurService.getProfesseurById(ProfId.get()).get();
+            modules = moduleService.GetAllModulesOfProfesseur(professeur);
+        }
 
         // Create a list to store module names
         List<String> moduleNames = new ArrayList<>();
@@ -332,46 +354,6 @@ public class StudentsController {
         stage.showAndWait();
     }
 
-    @FXML
-    private void handleDownloadCsv() {
-        // Get the current items in the TableView (filtered or unfiltered)
-        ObservableList<Etudiant> students = studentsTable.getItems();
-
-        if (students.isEmpty()) {
-            showAlert("No Data", "There is no data to export.");
-            return;
-        }
-
-        // Create a FileChooser to let the user choose where to save the CSV file
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save CSV File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-        File file = fileChooser.showSaveDialog(studentsTable.getScene().getWindow());
-
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
-                // Write the CSV header
-                writer.write("ID,Matricule,Nom,Prenom,Email,Promo,Date Naissance\n");
-
-                // Write each student's data to the CSV file
-                for (Etudiant student : students) {
-                    writer.write(
-                            student.getId() + "," +
-                                    student.getMatricule() + "," +
-                                    student.getNom() + "," +
-                                    student.getPrenom() + "," +
-                                    student.getEmail() + "," +
-                                    student.getPromo() + "," +
-                                    student.getDateNaissance() + "\n"
-                    );
-                }
-
-                showAlert("Success", "CSV file has been saved successfully.");
-            } catch (IOException e) {
-                showAlert("Error", "An error occurred while saving the CSV file: " + e.getMessage());
-            }
-        }
-    }
 
     @FXML
     private void handleDownloadExcel() {
@@ -475,5 +457,13 @@ public class StudentsController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void setProfId(int id) {
+        this.ProfId.set(id);
+    }
+
+    public int getProfId() {
+        return this.ProfId.get();
     }
 }
